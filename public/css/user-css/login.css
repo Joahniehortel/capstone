@@ -1,0 +1,146 @@
+:root {
+    --darkmode: #1f2032;
+    --orange: #f9977b;
+    --blue1: #3B71CA;
+    --blue: #0D6EFD;
+    --white: #F4F1F8;
+}
+*{
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+.route{
+    text-decoration: none;
+    color: #6D4C41;
+}
+.logo{
+    text-align: center;
+    width: 100%;
+    gap: 5px;
+}
+.logo .logo-icon{
+    width: 15%;
+}
+.logo a{
+    font-size: 24px;
+    color: #6D4C41;
+    font-weight: 500;
+}
+a{
+    text-decoration: none;
+    color: #0D6EFD;
+}
+.google-btn{
+    padding: 10px;
+    width: 100%;
+    color: var(--darkmode);
+    background-color: white;
+    border: 1px solid #ccc;
+}
+.google-btn:hover{
+    background-color: #f1f1f1;
+    border-color: #ccc;
+}
+.google-icon{
+    width: 24px;
+}
+.leftside{
+    position: relative;
+}
+.leftside img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 5px 10px;
+}
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+.rightside{
+    margin: 2rem;
+    width: 35rem;
+}
+
+.form-floating-custom {
+    position: relative;
+}
+
+.form-floating-custom input,
+.form-floating-custom textarea {
+    width: 100%;
+    padding: 0.75rem 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.form-floating-custom label {
+    position: absolute;
+    top: 50%;
+    left: 0.5rem;
+    transform: translateY(-50%);
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+    background-color: white;
+    padding: 0 0.25rem;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border: 2px solid #6D4C41;
+    box-shadow: none;
+}
+
+.form-control.error{
+    border: #dc3545 solid 2px;
+    
+}
+.form-floating-custom input:focus+label,
+.form-floating-custom input:not(:placeholder-shown)+label,
+.form-floating-custom textarea:focus+label,
+.form-floating-custom textarea:not(:placeholder-shown)+label {
+    top: -0.2rem;
+    left: 0.4rem;
+    font-size: 14px;
+    color: #6D4C41;
+}
+
+.btn-signin {
+    width: 100%;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    background-color: #6D4C41;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+@media(max-width: 375px) and (max-height: 667px){
+    *{
+        padding: 0px;
+    }
+    .left{
+        display: none;
+    }
+    .leftside img{
+        display: none;
+    }
+    body{
+        width: 375px;
+    }
+    .login{
+        width: 375px;
+        height: 667px;
+    }
+    .rightside{
+        margin: 0px;
+    }
+}

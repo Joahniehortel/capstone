@@ -1,0 +1,50 @@
+.page-content{
+    background-color: #fff;
+}
+.about{
+    padding: 5rem 8rem 5rem 8rem;
+}
+.about-what{
+    line-height: 2;
+}
+.about-purpose{
+    line-height: 2;
+}
+.title{
+    font-size: 30px;
+}
+.about-general h1{
+    font-size: 24px;
+}
+.about-general .title{
+    font-size: 30px;
+}
+.about-general .about-residents{
+    display: grid;
+    line-height: 2;
+    grid-template-columns: auto auto;
+}
+.about-general .about-purpose img{
+    width: 100%;
+}
+.about-general .about-officials img{
+    text-align: center;
+    width: 100%;
+}
+.about-officials{
+    display: grid;
+    grid-template-columns: auto auto;
+    line-height: 2;
+}
+
+@media(max-width: 375px) and (max-height: 667px){
+    .page-content{
+        padding: 0px;
+    }
+    .about{
+        padding: 20px;
+    }
+    img{
+        display: none;
+    }
+}

@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Permanent+Marker&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+body {
+    font-family: "Roboto", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+button{
+    background-color: #6D4C41;
+    color: white;
+    border-radius: 0px;
+    padding: 10px 15px;
+    border: none;
+}
+a{
+    padding: 10px 15px;
+    border: 2px solid #6D4C41;
+    color: #6D4C41;
+    text-decoration: none;
+}
+.container {
+    height: 100%;
+    width: 500px;
+}
+.image {
+    width: 200px;
+}
+h1{
+    font-size: 24px;
+}
+.btn.submit{
+    border-radius: 0px;
+    padding: 5px 10px;
+    background-color: #6D4C41;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}

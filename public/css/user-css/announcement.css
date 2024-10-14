@@ -1,0 +1,41 @@
+.document-logo {
+    width: 100%;
+    height: auto; 
+    margin-right: 10px;
+}
+.page-content{
+    background-color: #fff;
+}
+.no_announcements{
+    width: 50%;
+}
+.announcement-list-container {
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+}
+.announcement-container {
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 8rem;
+    margin-left: 8rem;
+    padding-left: 8rem;
+    padding-right: 8rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-top: 5px solid #6D4C41;
+    background-color: white;
+}
+
+.announcement_content {
+    font-size: 14px;
+    font-weight: 200;
+}
+
+.announcement_title {
+    font-size: 16px;
+}
+
+.announcement_details {
+    text-overflow: ellipsis;
+}

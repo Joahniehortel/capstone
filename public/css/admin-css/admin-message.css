@@ -1,0 +1,37 @@
+
+.page-content{
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    position: relative;
+    padding: 25px;
+}
+td, th{
+    font-weight: 400;
+    font-size: 14px;
+}
+input[type="text"]{
+    border-radius: 0px;
+}
+input[type="text"]:focus{
+    border: 1px solid #6D4C41;
+    border-radius: 0px;
+}
+textarea{
+    width: 100%;
+}
+.btn-submit{
+    background-color: #6D4C41;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+label{
+    font-weight: 400;
+    color: black;
+}
+.table-container{
+    background-color: #fff;
+    padding: 25px;
+}

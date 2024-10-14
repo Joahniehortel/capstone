@@ -1,0 +1,173 @@
+.page-content{
+    height: 80vh;
+}
+.table-container{
+    font-size: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.table-container th, .table-container td {
+    padding: 0.8rem;
+    white-space: nowrap;
+}
+
+.table-header{
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 14px;
+    display: flex;
+    position: relative;
+    width: 100%;
+}
+.breadcrumb a{
+    text-decoration: none;
+}
+.table-container .table th span{
+    font-size: 14px;
+}
+td{
+    font-size: 14px;
+    color: black;
+    font-weight: 400;
+}
+.table-header .btn-header{
+    justify-content: end;
+    position: absolute;
+    right: 0;
+    width: 175px;
+
+}
+.table-header .btn-header .add-btn{
+    display: flex;
+    font-size: 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #443DF6;
+    padding: 8px 24px 8px 24px;
+    border-radius: 5px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+span{
+    font-size: 14px;
+}
+.table-header .btn-header .import-btn{
+    width: 100%;
+    display: flex;
+    font-size: 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    color: #443DF6;
+    background-color: transparent;
+    padding: 6px 24px 6px 24px;
+    border: 2px solid #443DF6;
+    border-radius: 5px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-pdf.buttons-html5 {
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: #dc3545;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-csv.buttons-html5 {
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: #0dcaf0;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-excel.buttons-html5 {
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: #198754;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-copy.buttons-html5 {
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: #6c757d;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-pdf.buttons-html5:hover {
+    background-color: #c82333; 
+    box-shadow: rgba(220, 53, 69, 0.5) 0px 8px 9px -4px, rgba(220, 53, 69, 0.3) 0px 4px 18px 0px;
+}
+
+.dt-button.buttons-csv.buttons-html5:hover {
+    background-color: #0bb2d4;
+    box-shadow: rgba(13, 202, 240, 0.5) 0px 8px 9px -4px, rgba(13, 202, 240, 0.3) 0px 4px 18px 0px;
+}
+
+.dt-button.buttons-excel.buttons-html5:hover {
+    background-color: #157347; 
+    box-shadow: rgba(25, 135, 84, 0.5) 0px 8px 9px -4px, rgba(25, 135, 84, 0.3) 0px 4px 18px 0px;
+}
+
+.dt-button.buttons-copy.buttons-html5:hover {
+    background-color: #5c636a; 
+    box-shadow: rgba(108, 117, 125, 0.5) 0px 8px 9px -4px, rgba(108, 117, 125, 0.3) 0px 4px 18px 0px;
+}
+.dt-search{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.dt-search .form-control.form-control-sm{
+    padding: 5px 10px;
+}
+.table-container{
+    background-color: #fff;
+}
+.btn-group .drop-down-btn{
+    display: flex;
+    align-items: center;
+    border: none;
+}
+.dropdown-item{
+    font-size: 14px;
+}
+.dropdown-btn.dropdown-toggle{
+    border: none;
+    background-color: white;
+    padding: 8px 24px 8px 24px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.modal.fade .modal-dialog .modal-footer .delete-btn{
+    padding: 8px 24px 8px 24px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.modal.fade .modal-dialog .modal-footer .btn-close{
+    border: none;
+}
+.modal.fade .modal-dialog .modal-footer .delete-btn:hover{
+    background-color: #c82333; 
+    box-shadow: rgba(220, 53, 69, 0.5) 0px 8px 9px -4px, rgba(220, 53, 69, 0.3) 0px 4px 18px 0px;
+}
+.page-link{
+    font-size: 14px;
+}
+#myTab button{
+    font-size: 12px;
+}
+#process_info{
+    font-size: 14px;
+}

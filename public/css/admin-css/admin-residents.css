@@ -1,0 +1,144 @@
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.table-container{
+    background-color: #fff;
+    padding: 25px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+.table-container th, .table-container td {
+    padding: 0.8rem;
+}
+
+#residents {
+    width: 100% !important;
+}
+#dt-search-0{
+    border-radius: 0px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+#dt-length-0{
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 0px;
+}
+.table-container th, .table-container td {
+    padding: 1rem;
+}
+.child-row {
+    transition: transform 0.3s ease;
+}
+label{
+    font-size: 14px;
+    font-weight: 200;
+}
+.child-row.rotate {
+    transform: rotate(90deg); 
+}
+.table-header{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin-top: 25px;
+}
+.row.mt-2.justify-content-between label{
+    font-weight: 200;
+}
+.table-header .add-btn{
+    display: flex;
+    align-items: end;
+    justify-content: flex-end;
+}
+.table-header .add-btn a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+table {
+    border-collapse: collapse; 
+    position: inherit;
+}
+td{
+    font-weight: 400;
+    text-align: center;
+}
+#image{
+    width: 35%;
+    border-radius: 50%;
+}
+.table-responsive{
+    width: 100%;
+    position: relative;
+    padding: 25px;
+    margin-bottom: 25px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.table-responsive .table th span{
+    font-size: 14px;
+}
+td{
+    font-size: 14px;
+    color: black;
+}
+td div, .page-link{
+    color: black;
+    font-size: 14px;
+}
+#pwd-filter, #age-start, #age-end{
+    font-size: 14px;
+    border-radius: 0px;
+}
+.dt-scroll-head{
+    display: none;
+}
+th, td { 
+    white-space: nowrap; 
+    text-align: start;
+}
+div.dt-container {
+    width: auto;
+    z-index: -1;
+}
+.dt-scroll-foot{
+    display: none;
+}
+.admin-icon{
+    width: 35px;
+    background-color: #ddd;
+}
+#search{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    margin-bottom: 25px;
+}
+#search button{
+    border: none;
+    background-color: #6D4C41;
+    color: white;
+    padding: 10px;
+}
+.add-residents-btn{
+    border-radius: 0px;
+    padding: 10px 10px;
+    background-color: #6D4C41;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+    font-size: 14px;
+}
+input[type="number"]{
+    padding: 5px 10px;
+}
+input[type="text"], input[type="password"]{
+    font-size: 14px;
+}

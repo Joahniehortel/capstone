@@ -1,0 +1,162 @@
+
+*{
+    font-size: 16px;
+}
+body{
+    background-color: white;
+}
+.complaint-image-area {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative; 
+    padding: 20px;
+    background-size: cover;
+    background-position: center; 
+    border: 1px solid #ddd; 
+}
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; 
+}
+
+
+.complaint-image-area .icon {
+    font-size: 100px;
+}
+
+.complaint-image-area h3 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.complaint-image-area p {
+    color: #999;
+}
+
+.complaint-image-area p span {
+    font-weight: 600;
+}
+
+.complaint-image-area img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 100;
+}
+
+.complaint-image-area::before {
+    content: attr(data-img);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: all .3s ease;
+    z-index: 200;
+}
+
+.complaint-image-area.active:hover::before {
+    opacity: 1;
+}
+
+.page-content{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+.complain-content{
+    display: flex;
+    flex-direction: column;
+    padding: 5rem 8rem 2.5rem 8rem;
+}
+.dt-button.buttons-pdf.buttons-html5 {
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: #dc3545;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-csv.buttons-html5 {
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: #0dcaf0;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-excel.buttons-html5 {
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: #198754;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-copy.buttons-html5 {
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: #6c757d;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.dt-button.buttons-pdf.buttons-html5:hover {
+    background-color: #c82333; 
+    box-shadow: rgba(220, 53, 69, 0.5) 0px 8px 9px -4px, rgba(220, 53, 69, 0.3) 0px 4px 18px 0px;
+}
+
+.dt-button.buttons-csv.buttons-html5:hover {
+    background-color: #0bb2d4;
+    box-shadow: rgba(13, 202, 240, 0.5) 0px 8px 9px -4px, rgba(13, 202, 240, 0.3) 0px 4px 18px 0px;
+}
+
+.dt-button.buttons-excel.buttons-html5:hover {
+    background-color: #157347; 
+    box-shadow: rgba(25, 135, 84, 0.5) 0px 8px 9px -4px, rgba(25, 135, 84, 0.3) 0px 4px 18px 0px;
+}
+
+.dt-button.buttons-copy.buttons-html5:hover {
+    background-color: #5c636a; 
+    box-shadow: rgba(108, 117, 125, 0.5) 0px 8px 9px -4px, rgba(108, 117, 125, 0.3) 0px 4px 18px 0px;
+}
+.dt-search{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.submit{
+    padding: 10px 10px;
+    background-color: #6D4C41;
+    border: none;
+    width: 100px;
+    color: white;
+    border-radius: 0px;
+}
+.complaint-select-image{
+    padding: 5px 10px;
+    width: 100%;
+    background-color: #6D4C41;
+    border-radius: 0px;
+    color: white;
+    border: none;
+}
+@media(max-width: 375px) and (max-height: 667px){
+    .complain-content{
+        padding: 20px;
+    }
+}

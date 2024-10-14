@@ -1,0 +1,53 @@
+td, th{
+    font-size: 14px;
+    font-weight: 400;
+}
+.table-header{
+    position: relative;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin-top: 25px;
+    z-index: 1;
+}
+.table-container table {
+    font-size: 0.85rem;
+}
+.table-container th, .table-container td {
+    padding: 0.8rem;
+}
+
+.table-header .add-btn{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+table {
+
+    border-collapse: collapse;
+    overflow-x: scroll;
+}
+.table-container{
+    overflow-x: auto; 
+    overflow-y: hidden;
+    white-space: nowrap; 
+    position: relative;
+    padding: 25px;
+    margin-bottom: 25px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+td div, .page-link{
+    color: black;
+    font-size: 14px;
+}
+.row.mt-2.justify-content-between{
+    position: relative;
+}
+.image{
+    width: 50px;
+    height: 50px;
+}
+.dt-scroll-head{
+    display: none;
+}

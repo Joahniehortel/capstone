@@ -1,0 +1,113 @@
+:root{
+    --main: #ffffff;
+    --background: #f2f8fc;
+    --darkmode: #1f2032;
+    --orange: #f9977b;
+    /* MDB color code*/
+    --blue1: #3B71CA;
+    --blue: #0D6EFD;
+}
+*{
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+.text-body{
+    text-decoration: none;
+}
+a{
+    text-decoration: none;
+    color: #6D4C41;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--main);
+}
+.logo{
+    text-align: center;
+    color: black;
+    width: 60px;
+}
+h1{
+    font-weight: 400;
+    font-size: 30px;
+}
+p{
+    font-size: 14px;
+}
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+.container{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column; 
+    width: 40rem;
+    padding: 5%;
+}
+
+.form-floating-custom {
+    position: relative;
+}
+
+.form-floating-custom input,
+.form-floating-custom textarea {
+    width: 100%;
+    padding: 0.75rem 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.form-floating-custom label {
+    position: absolute;
+    top: 50%;
+    left: 0.5rem;
+    transform: translateY(-50%);
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+    background-color: white;
+    padding: 0 0.25rem;
+}
+
+form input[type="text"]:focus,
+input[type="password"]:focus {
+    border: 2px solid #6D4C41;
+    box-shadow: none;
+}
+.form-floating-custom input:focus+label,
+.form-floating-custom input:not(:placeholder-shown)+label,
+.form-floating-custom textarea:focus+label,
+.form-floating-custom textarea:not(:placeholder-shown)+label {
+    top: -0.2rem;
+    left: 0.4rem;
+    font-size: 14px;
+    color: #6D4C41;
+}
+.login-btn{
+    width: 100%;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    background-color: #6D4C41;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.google-btn{
+    padding: 10px;
+    width: 100%;
+    color: var(--darkmode);
+    background-color: white;
+    border: 1px solid #ccc;
+}
+.google-icon{
+    width: 24px;
+}

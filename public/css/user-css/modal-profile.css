@@ -1,0 +1,7 @@
+#view-profile .modal-body{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+.modal-profile-image{
+    width: 250px;
+}
