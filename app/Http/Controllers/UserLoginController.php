@@ -64,7 +64,7 @@ class UserLoginController extends Controller
     
             return redirect()->route('home')->with('google_account', $googleUserAccount);
         }
-    
+        
         return redirect()->route('login')->with('error', 'An account with this email already exists. Please log in using your email and password.');
     }
 

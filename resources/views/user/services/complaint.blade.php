@@ -50,16 +50,48 @@
                             </div>
                         @enderror
                     </div>
+                    
                 </div>
                 <p>Optional: You may upload an image to support your complaint.</p>
-                <div class="row mb-3 d-flex justify-content-center">
-                    <div class="modal-container">
-                        <div class="complaint-image-area" data-img="">
-                            <input type="file" id="file1" name="complaint_image" hidden>
+                <div class="row d-flex justify-content-center aling-center">
+                    <div class="modal-container d-flex justify-content-center flex-column" style="width: 100%">
+                        <div class="complaint-image-area" data-img="" style="width: 85%; display: block; height: 300px">
+                            @if($complaint != '')
+                                @if($complaint->complaint_image)
+                                    @php
+                                        $fileExtension = pathinfo($complaint->complaint_image, PATHINFO_EXTENSION);
+                                    @endphp
+                                    @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
+                                        <img src="{{ Storage::url($complaint->complaint_image) }}" alt="Complaint Image" style="width: 100%;">
+                                    @elseif($fileExtension === 'pdf')
+                                            <div style="width: 100%; height: 100%;">
+                                                <iframe src="{{ Storage::url($complaint->complaint_image) }}" style="width: 100%; height:100%"></iframe>
+                                            </div>
+                                    @elseif(in_array($fileExtension, ['mp4', 'avi', 'mov', 'wmv']))
+                                        <video controls width="500" height="300">
+                                            <source src="{{ Storage::url($complaint->complaint_image) }}" type="video/{{ $fileExtension }}">
+                                            Your browser does not support the video tag.
+                                            <h1>{{ $fileExtension }}</h1>
+                                        </video>
+                                        <p>{{ basename($complaint->complaint_image) }}</p>
+                                    @elseif($fileExtension === 'mp3')
+                                        <audio controls style="width: 100%;">
+                                        <source src="{{ Storage::url($complaint->complaint_image) }}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                    @else
+                                        <p>Unsupported file type.</p>
+                                    @endif
+                                @endif
+                                @else
+                                    <i class='bx bxs-cloud-upload icon'></i>
+                                    <h3>Upload File</h3>
+                                    <p>File size must be less than <span>100MB</span>. Supported formats: Images, Videos, and PDFs</p>
+                            @endif
                             
-                            <i class='bx bxs-cloud-upload icon'></i>
-                            <h3>Upload File</h3>
-                            <p>File size must be less than <span>100MB</span>. Supported formats: Images and Videos</p>                            
+                                <input type="file" id="file1" name="complaint_image" hidden>
+                        </div>                        
+                        <div class="file-area" style="width: 100%">
                         </div>
                             <progress id="uploadProgress" value="0" max="100" style="width: 100%; display: none;"></progress>
                             <div class="loading-indicator" style="display: none;">
@@ -67,7 +99,9 @@
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </div>
-                        <button type="button" class="complaint-select-image">Upload File</button>
+                        <div class="d-flex justify-content-center">
+                            <button type="button" class="complaint-select-image" style="width: 100%">Upload File</button>
+                        </div>
                     </div>   
                 </div>
                 <div class="loading-indicator" style="display: none;">
@@ -135,26 +169,22 @@
         });
     </script>
     <script>
-        const selectImage = document.querySelector('.complaint-select-image');  
+        const selectButton = document.querySelector('.complaint-select-image');
         const inputFile = document.querySelector('#file1');
         const imgArea = document.querySelector('.complaint-image-area');
+        const fileArea = document.querySelector('.file-area');
         const loadingIndicator = document.querySelector('.loading-indicator');
         const uploadProgress = document.getElementById('uploadProgress');
+        const complaintImageArea = document.querySelector('.complaint-image-area');
 
-        selectImage.addEventListener('click', function() {
-            inputFile.click();
-        });
-
-        inputFile.addEventListener('change', function() {
-            const image = this.files[0];
+        function handleFileSelection(image) {
             if (image.size < 100000000) { // Check for 100MB limit
-                
                 loadingIndicator.style.display = 'flex';
                 uploadProgress.style.display = 'block';
-                uploadProgress.value = 0; 
+                uploadProgress.value = 0;
 
                 const reader = new FileReader();
-                
+
                 reader.onprogress = (event) => {
                     if (event.lengthComputable) {
                         const percentComplete = (event.loaded / event.total) * 100;
@@ -163,61 +193,86 @@
                 };
 
                 reader.onloadstart = () => {
-                    uploadProgress.value = 0; 
+                    uploadProgress.value = 0;
                 };
 
                 reader.onload = () => {
-                    const allImg = imgArea.querySelectorAll('img');
-                    allImg.forEach(item => item.remove());
-                    
-                    const fileType = image.type;
-                    let imgUrl;
+            const allContent = imgArea.querySelectorAll('img, iframe, audio'); // Remove existing images/iframes/audios
+            allContent.forEach(item => item.remove());
 
-                    if (fileType.startsWith('image/')) {
-                        imgUrl = reader.result;
-                        const img = document.createElement('img');
-                        img.src = imgUrl;
-                        imgArea.appendChild(img);
-                    } else if (fileType.startsWith('video/')) {
-                        imgUrl = '/images/multimedia.png'; 
-                        const img = document.createElement('img');
-                        img.src = imgUrl;
-                        imgArea.appendChild(img);
-                    } else if (fileType === 'application/pdf') {
-                        // If it's a PDF, display a PDF icon
-                        imgUrl = '/images/pdf.png'; 
-                        const img = document.createElement('img');
-                        img.src = imgUrl;
-                        imgArea.appendChild(img);
-                    } else if (fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                        // Check for Word document file types (.doc or .docx)
-                        const img = document.createElement('img');
-                        imgUrl = '/images/word.jpg'; 
-                        img.src = imgUrl;
-                        imgArea.appendChild(img);
-                    } else {
-                        // For other file types, display a generic file icon
-                        imgUrl = '/images/file-icon.png'; 
-                        const img = document.createElement('img');
-                        img.src = imgUrl;
-                        imgArea.appendChild(img);
-                    }
+            const fileType = image.type;
 
-                    // Add the select button event listener (for selecting files)
-                    const selectButton = document.querySelector('.complaint-select-image');
-                    selectButton.addEventListener('click', function() {
-                        inputFile.click();
-                    });
-                    imgArea.classList.add('active');
-                    imgArea.dataset.img = image.name;
+            if (fileType.startsWith('image/')) { // For image files
+                complaintImageArea.style.display = 'block';
+                const img = document.createElement('img');
+                img.src = reader.result; // Display the image
+                img.width = '100%';
+                img.height = '200px';
+                imgArea.appendChild(img);
+            } else if (fileType === 'application/pdf') { // For PDF files
+                complaintImageArea.style.display = 'none';
+                const iframe = document.createElement('iframe');
+                iframe.src = reader.result; // Display the PDF in iframe
+                iframe.width = '100%';
+                iframe.height = '500px';
+                fileArea.appendChild(iframe);
+            } else if (fileType === 'audio/mpeg') { // For MP3 files
+                complaintImageArea.style.display = 'none';
+                const audio = document.createElement('audio');
+                audio.src = reader.result; 
+                audio.controls = true;
+                audio.style.width = '100%'; 
+                fileArea.appendChild(audio);
+            }
+            else if (fileType.startsWith('video/')) { 
+                complaintImageArea.style.display = 'none';
+                const video = document.createElement('video');
+                video.controls = true; 
+                video.width = '100%';
+                video.height = '300px';
+                
+                const source = document.createElement('source');
+                source.src = reader.result; 
+                source.type = fileType;
 
-                    loadingIndicator.style.display = 'none';
-                    uploadProgress.style.display = 'none'; 
-                };
-                reader.readAsDataURL(image);
+                video.appendChild(source); 
+                fileArea.appendChild(video); 
+
+                const fileName = fileInput.files[0].name; // Get the name from the input
+                const fileNameDisplay = document.createElement('h1');
+                fileNameDisplay.innerText = fileName; // Set the file name
+                fileArea.appendChild(fileNameDisplay); // Append to the file area
             } else {
-                alert("Image size more than 100MB"); 
+                const unsupportedMsg = document.createElement('p');
+                unsupportedMsg.innerText = 'Unsupported file type.';
+                imgArea.appendChild(unsupportedMsg);
+            }
+
+            imgArea.classList.add('active');
+            imgArea.dataset.img = image.name;
+
+            loadingIndicator.style.display = 'none';
+            uploadProgress.style.display = 'none';
+        };
+
+        reader.readAsDataURL(image); // Read the file as data URL
+    } else {
+        alert("File size is more than 100MB."); // Error for files larger than 100MB
+    }
+        }
+
+        // Open the file dialog on button click
+        selectButton.addEventListener('click', function () {
+            inputFile.click();
+        });
+
+        // Process the selected file when it changes
+        inputFile.addEventListener('change', function () {
+            const file = this.files[0]; // Get the selected file
+            if (file) {
+                handleFileSelection(file); // Process the selected file
             }
         });
-    </script> 
+    </script>
+    
 @endpush

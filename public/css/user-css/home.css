@@ -10,7 +10,8 @@
     height: 100vh;   
     width: 100%;        
     text-align: center;
-    background-image: url('/images/homepage-background.jpg');
+    /* background-image: url('/images/homepage-background.jpg'); */
+    background-color: #1B2124;
     background-size: cover;
 }
 
@@ -54,7 +55,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;               /* Circle width */
+    width: 50px;        
     height: 50px;  
 }
 .readMore{
@@ -67,13 +68,7 @@
 .page-title{
     font-weight: 600;
 }
-.announcements .section-details p{
-    text-align: center;
-}
-.section-details p{
-    opacity: 0.5;
-    line-height: 1;
-}
+
 .text-container{
     color:white;
     display: flex;
@@ -93,6 +88,9 @@
 }
 .section-details{
     text-align: start;
+}
+.section-details h1{
+    font-weight: 700;
 }
 .about span{
     font-size: 16px;
@@ -167,10 +165,20 @@
 .card{
     background-color: #fff;
     border-radius: 8px;
-    width: 312px;
+    display: flex;             
+    flex-direction: column;    
+    height: 400px;
+    border-radius: 0px;      
+    position: relative;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
 }
 .card .image-box {
     height: 200px;
+}
+.card-footer button{
+    border-radius: 0px;
+    border: none;
+
 }
 .card .image-box img{
     height: 100%;
@@ -197,10 +205,6 @@
 }
 .announcements{
     padding: 5rem;
-    background-color: #fff;
-}
-.no_announcements{
-    width: 50%;
 }
 .announcements h1{
     font-size: 28px;
@@ -208,60 +212,52 @@
 .profile-dropdown:hover{
     background-color: white;
 }
-.view-more{
-    padding: 8px 16px 8px 16px;
-    border: none;
-    border-radius: 0px;
-    color: white;
-    background-color: #6D4C41;
+.document-logo {
+    width: 100%;
+    height: auto; 
+    margin-right: 10px;
 }
-.card {
-    display: flex;             
-    flex-direction: column;    
-    height: 400px;
-    border-radius: 0px;      
+.page-content{
+    background-color: #fff;
 }
-
-.card-body {
-    flex: 1;                  
-    display: flex;        
-    flex-direction: column;    
-    justify-content: space-between; 
+.no_announcements{
+    width: 300px;
 }
-
-.view-more {
-    margin-top: 20px;      
+.announcement-list-container {
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
 }
-
-.card-body p{
-    margin-bottom: 0; 
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    display: block; 
-    font-size: 14px;
-}
-.card-img-top {
-    height: 30vh; 
-    object-fit: cover; 
-    width: 100%; 
-    border-radius: 0px;
+.announcement-container {
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-top: 5px solid #6D4C41;
+    background-color: white;
 }
 
-.card-body a{
-    padding: 8px 16px 8px 16px;
-    border: none;
-    border-radius: 0px;
+.list{
+    padding-left: 8rem;
+    padding-right: 8rem;
 }
-.card-footer a{
-    text-decoration: none;
+ul{
+    list-style-type: none;
 }
-.view-details{
-    background-color: transparent;
-    color: black;
-}
-.view-more{
-    background-color: #F2613F;
+
+@media(max-width: 1000px) {
+    .announcement-container {
+        margin: 10px;
+        padding: 10px;
+    }
+    .title-content h1{
+        font-size: 25px;
+    }
+    .list{
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+    }
 }
 @media(max-width: 375px) and (max-height: 667px){
     *{
@@ -274,8 +270,12 @@
     .about-image{
         display: none;
     }
-    .navbar-brand a{
-        display: none;
+    .numbers{
+        height: 25px;
+        width: 50px;
+    }
+    .text-start.mt-3{
+        text-align: center;
     }
     .about{
         display: flex;
@@ -297,6 +297,18 @@
         align-items: center;
         display: flex;
         flex-direction: column;
+        padding: 10px;
+    }
+}
+@media(max-width: 1000px){
+    .about-image{
+        display: none;
+    }
+    .about{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        margin: 0px;
         padding: 10px;
     }
 }

@@ -1,24 +1,35 @@
 
 .page-content{
+    font-size: 14px;
     display: flex;
     flex-direction: column;
     background-color: #fff;
     position: relative;
     padding: 25px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.table-header{
+    font-size: 14px;
+}
+.table-container{
+    font-size: 14px;
 }
 td, th{
     font-weight: 400;
     font-size: 14px;
 }
 input[type="text"]{
+    font-size: 14px;
     border-radius: 0px;
 }
 input[type="text"]:focus{
     border: 1px solid #6D4C41;
     border-radius: 0px;
+    font-size: 14px;
 }
 textarea{
     width: 100%;
+    font-size: 14px;
 }
 .btn-submit{
     background-color: #6D4C41;
@@ -34,4 +45,5 @@ label{
 .table-container{
     background-color: #fff;
     padding: 25px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
 }

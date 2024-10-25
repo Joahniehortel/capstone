@@ -116,3 +116,11 @@ input[type="password"]:focus {
         display: none;
     }
 }
+@media(max-width:1000px){
+    .left img{
+        display: none;
+    }
+    .left{
+        display: none;
+    }
+}

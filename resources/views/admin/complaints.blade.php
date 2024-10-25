@@ -20,6 +20,7 @@
     @endpush
 
     @section('content')
+    
         <div class="page-content">
             <div class="table-header" style="margin-bottom: -5px">
                 <div class="col">
@@ -57,10 +58,9 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Complaint</th>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last name</th>
-                                    <th scope="col">Complaint Detail</th>
+                                    <th scope="col">Date</th>
                                     <th scope="col">Status</th>
                                     <th scope="col"></th>
                             </thead>
@@ -68,10 +68,9 @@
                                 @foreach ($onProcesses as $onProcess)
                                     <tr>
                                         <td style="text-align: start">{{ $onProcess->id }}</td>
-                                        <td style="text-align: start">{{ $onProcess->complaint_title }}</td>
-                                        <td style="text-align: start">{{ $onProcess->firstname }}</td>
-                                        <td style="text-align: start">{{ $onProcess->lastname }}</td>
-                                        <td style="text-align: start">{{ $onProcess->created_at }}</td>
+                                        <td style="text-align: start">{{ $onProcess->firstname }} {{ $onProcess->lastname }}</td>
+                                        <td style="text-align: start">{{ Str::limit($onProcess->complaint_title, 20) }}</td>
+                                        <td style="text-align: start">{{ \Carbon\Carbon::parse($onProcess->created_at)->format('F j, Y') }}</td>
                                         <td style="text-align: start">
                                             @switch($onProcess->complaint_status)
                                                 @case('Pending')
@@ -109,7 +108,6 @@
                             </tbody>
                         </table>
                     </div>
-    
                 </div>
                 <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                     <div class="table-container">
@@ -117,10 +115,9 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Complaint</th>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last name</th>
-                                    <th scope="col">Date Complaint</th>
+                                    <th scope="col">Date</th>
                                     <th scope="col">Status</th>
                                     <th scope="col"></th>
                             </thead>
@@ -128,10 +125,9 @@
                                 @foreach ($resolves as $resolved)
                                     <tr>
                                         <td style="text-align: start">{{ $resolved->id }}</td>
+                                        <td style="text-align: start">{{ $resolved->firstname }} {{ $resolved->lastname }}</td>
                                         <td style="text-align: start">{{ $resolved->complaint_title }}</td>
-                                        <td style="text-align: start">{{ $resolved->firstname }}</td>
-                                        <td style="text-align: start">{{ $resolved->lastname }}</td>
-                                        <td style="text-align: start">{{ $resolved->created_at }}</td>
+                                        <td style="text-align: start">{{ \Carbon\Carbon::parse($resolved->created_at)->format('F j, Y, g:i A') }}</td>
                                         <td style="text-align: start">
                                             @switch($resolved->complaint_status)
                                                 @case('Pending')
@@ -177,10 +173,9 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Complaint</th>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last name</th>
-                                    <th scope="col">Date Complaint</th>
+                                    <th scope="col">Date</th>
                                     <th scope="col">Status</th>
                                     <th scope="col"></th>
                             </thead>
@@ -188,10 +183,9 @@
                                 @foreach ($escalates as $escalate)
                                     <tr>
                                         <td style="text-align: start">{{ $escalate->id }}</td>
+                                        <td style="text-align: start">{{ $escalate->firstname }} {{ $escalate->lastname }}</td>
                                         <td style="text-align: start">{{ $escalate->complaint_title }}</td>
-                                        <td style="text-align: start">{{ $escalate->firstname }}</td>
-                                        <td style="text-align: start">{{ $escalate->lastname }}</td>
-                                        <td style="text-align: start">{{ $escalate->created_at }}</td>
+                                        <td style="text-align: start">{{ \Carbon\Carbon::parse($escalate->created_at)->format('F j, Y, g:i A') }}</td>
                                         <td style="text-align: start">
                                             @switch($escalate->complaint_status)
                                                 @case('Pending')
@@ -237,10 +231,9 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Complaint</th>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last name</th>
-                                    <th scope="col">Date Complaint</th>
+                                    <th scope="col">Date</th>
                                     <th scope="col">Status</th>
                                     <th scope="col"></th>
                             </thead>
@@ -248,10 +241,9 @@
                                 @foreach ($rejects as $reject)
                                     <tr>
                                         <td style="text-align: start">{{ $reject->id }}</td>
+                                        <td style="text-align: start">{{ $reject->firstname }} {{ $reject->lastname }}</td>
                                         <td style="text-align: start">{{ $reject->complaint_title }}</td>
-                                        <td style="text-align: start">{{ $reject->firstname }}</td>
-                                        <td style="text-align: start">{{ $reject->lastname }}</td>
-                                        <td style="text-align: start">{{ $reject->created_at }}</td>
+                                        <td style="text-align: start">{{ \Carbon\Carbon::parse($reject->created_at)->format('F j, Y, g:i A') }}</td>
                                         <td style="text-align: start">
                                             @switch($reject->complaint_status)
                                                 @case('Pending')
@@ -293,7 +285,9 @@
             </div>
         </div>
     @endsection
-
+    @push('footer')
+        <x-admin-components.admin-footer/>
+    @endpush
     @push('scripts')
         <script>
             new DataTable('#example', {
@@ -340,6 +334,3 @@
             });
         </script>
     @endpush
-@push('footer')
-    <x-admin-components.admin-footer/>
-@endpush

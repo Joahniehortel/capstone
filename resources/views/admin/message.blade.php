@@ -12,7 +12,7 @@
             <x-admin-components.admin-page-title>Send Message</x-admin-components.page-title>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">Send Message</li>
+                    <li class="breadcrumb-item active" aria-current="page" style="font-size: 14px">Send Message</li>
                 </ol>
             </nav>
         </div>
@@ -40,7 +40,7 @@
             </div>
             <div class="row-md-6 mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Message</label>
-                <textarea style="border-radius: 0px;" class="form-control w-100" name="sms_message" id="exampleFormControlTextarea1" rows="3" placeholder="Type your message here..."></textarea>
+                <textarea style="border-radius: 0px; font-size:14px" class="form-control w-100" name="sms_message" id="exampleFormControlTextarea1" rows="3" placeholder="Type your message here..."></textarea>
             </div>
             <div class="d-flex justify-content-end align-items-end"><button class="btn btn-primary" type="submit">Send Message</button></div>
         </form>

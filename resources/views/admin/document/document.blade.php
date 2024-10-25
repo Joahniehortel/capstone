@@ -26,7 +26,7 @@
                 </nav>
             </div>
             <div class="col add-btn d-flex justify-content-end align-items-center">
-                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDocument" style="font-size: 12px"><i class='bx bx-file'></i> Add Document</a>
+                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDocument" style="font-size: 12px"> Add Document</a>
                 {{-- add-official-btn --}}
                 <x-admin-components.modal.add-document/>
             </div>
@@ -46,11 +46,11 @@
                     <tr>
                         <td>{{ $document->id }}</td>
                         <td>{{ $document->file_name }}</td>
-                        <td>{{ $document->file_details }}</td>
+                        <td>{{ Str::limit($document->file_details, 50, '...') }}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                                    aria-expanded="false" style="font-size: 12px">
                                     Action
                                 </button>
                                 <ul class="dropdown-menu">
@@ -77,21 +77,21 @@
 @push('scripts')
 <script>
     new DataTable('#example', {
-    lengthMenu: [5, 10, 25],  
-    order: [[0, 'asc']],  
-    autoWidth: false,  
-    columnDefs: [
-        { width: "5%", targets: 0 },  
-        { width: "25%", targets: 1 }
-    ],
-    dom: '',  
-    language: {
-        buttons: {
-            selectAll: 'Select all items',
-            selectNone: 'Select none'
+        lengthMenu: [5, 10, 25],  
+        order: [[0, 'asc']],  
+        autoWidth: false,  
+        columnDefs: [
+            { width: "5%", targets: 0 },  
+            { width: "25%", targets: 1 }
+        ],
+        dom: '',  
+        language: {
+            buttons: {
+                selectAll: 'Select all items',
+                selectNone: 'Select none'
+            }
         }
-    }
-});
+    });
 
 </script>
 

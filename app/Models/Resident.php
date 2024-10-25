@@ -12,6 +12,6 @@ class Resident extends Model
         'ice_fullname', 'ice_address', 'ice_relationship', 'ice_contactNumber', 
         'firstName', 'middleName', 'lastName', 'birthDate', 'age', 'birthPlace',
         'gender', 'address', 'purokNumber', 'totalHousehold', 'voter', 'maritalStatus', 
-        'nationality', 'religion', 'pwd', 'ethnicity', 'occupation', 'MonthlyIncome', 'image'
+        'nationality', 'religion', 'pwd', 'indigenous', 'occupation', 'MonthlyIncome', 'image'
     ];
 }

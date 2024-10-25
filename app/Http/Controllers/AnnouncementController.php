@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\AnnouncementNotification;
+use App\Notifications\Announcement as NotificationsAnnouncement;
 
 class AnnouncementController extends Controller
 {
@@ -60,12 +63,17 @@ class AnnouncementController extends Controller
         else{
             $image = null;
         }
-        Announcement::create([
+        $announcement = Announcement::create([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'image_path' => $image
         ]);
-        return to_route('admin.announcement.create')->with('success', 'Announcement created successfully!');;
+        $users = User::all();
+
+        foreach($users as $user){
+            $user->notify(new AnnouncementNotification($announcement));
+        }
+        return to_route('admin.announcement.create')->with('success', 'Announcement created successfully!');
     }
     // public function upload(Request $request)
     // {

@@ -39,7 +39,7 @@ class ResidentFactory extends Factory
             'nationality' => 'Filipino',
             'religion' => $this->faker->optional()->randomElement(['Christianity', 'Islam', 'Other']),
             'pwd' => $this->faker->randomElement(['Yes', 'No']),
-            'ethnicity' => $this->faker->optional()->word(),
+            'indigenous' => $this->faker->randomElement(['Yes', 'No']),
             'occupation' => $this->faker->optional()->jobTitle(),
             'MonthlyIncome' => $this->faker->optional()->randomFloat(2, 0, 100000),
         ];

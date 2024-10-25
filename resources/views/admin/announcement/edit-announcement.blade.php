@@ -6,14 +6,16 @@
 @endpush
 
 @section('content')
-    <div class="table-header">
-        <x-admin-components.admin-page-title>Edit Announcement</x-admin-components.page-title>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/admin/announcements">Announcements</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit Announcement</li>
-            </ol>
-        </nav>
+    <div class="page-title" style="margin-bottom: 30px; margin-top:30px">
+        <div class="col">
+            <x-admin-components.admin-page-title>Add Announcement</x-admin-components.page-title>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/announcements">Announcements</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Announcement</li>
+                </ol>
+            </nav>
+        </div>
     </div>
     @if (session('success'))
         <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
@@ -71,6 +73,9 @@
                     <div class="modal-container">
                         <input type="file" id="file" name="image_path" hidden>
                         <div class="img-area" data-img="">
+                            @if($announcement->image_path)
+                                <img class="image" src="{{ Storage::url($announcement->image_path) }}" alt="Supporting File" />
+                            @endif
                             <i class='bx bxs-cloud-upload icon'></i>
                             <h3>Upload Image</h3>
                             <p>Image size must be less than <span>2MB</span></p>
@@ -111,20 +116,9 @@
             </div>
             <textarea id="editor" name="content" rows="10" placeholder="Write something...">{{ $announcement->content }}</textarea>
             <div class="d-flex justify-content-end align-items-end">
-                <button class="btn btn-primary mt-3" type="submit">Publish <i class='bx bx-send'></i></button>
+                <button class="btn btn-primary mt-3" type="submit">Publish</button>
             </div>
         </form>
-        {{-- <script>
-            ClassicEditor
-                .create(document.querySelector('#editor'), {
-                    ckfinder: {
-                        uploadUrl: "{{ route('admin.announcement.upload', ['_token' => csrf_token()]) }}",
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        </script> --}}
     </div>
     <br>
 @endsection

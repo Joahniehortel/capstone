@@ -29,7 +29,7 @@
             </div>
             <div class="col d-flex justify-content-end align-items-center">
                 <div>
-                    <a href="{{ route('admin.announcement.create')}}" class="btn btn-primary"><i class='bx bxs-megaphone'></i> Add Announcement</a>
+                    <a href="{{ route('admin.announcement.create')}}" class="btn btn-primary">Add Announcement</a>
                 </div>
             </div>
         </div>
@@ -50,8 +50,18 @@
                         <tr>    
                             <td>{{ $announcement->id}}</td>
                             <td>{{ $announcement->title }}</td>
-                            <td><img class="image" src="{{ Storage::url($announcement->image_path) }}" alt="Supporting File" style="width: 100px" /></td>
-                            <td>{{ $announcement->content }}</td>
+                            <td>
+                                @if($announcement->image_path)
+                                    <div class="text-center">
+                                        <img class="image" src="{{ Storage::url($announcement->image_path) }}" alt="Supporting File" style="width: 100px" />
+                                    </div>
+                                @else
+                                    <div class="text-center">
+                                        <img src="/images/default-image.png" alt="Failed to load" style="width: 50px">
+                                    </div>
+                                @endif
+                            </td>
+                            <td>{{ Str::limit($announcement->content, 25, '...') }}</td>
                             <td>{{ $announcement->created_at }}</td>
                             <td>
                                 <div class="dropdown">
@@ -87,25 +97,10 @@
 
 @push('scripts')
     <script>
-    new DataTable('#example', {
-        pagingType: "simple",  // Compact pagination
-        lengthMenu: [5, 10, 25],  // Adjust number of rows per page
-        order: [[0, 'asc']],  // Order by the first column
-        autoWidth: false,  // Prevents DataTables from expanding the table width
-        columnDefs: [
-            { width: "5%", targets: 0 },  // Adjust column width as needed
-            { width: "25%", targets: 1 }
-        ],
-        dom: '',  // Enable buttons
-        buttons: [
-            'copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'selectAll', 'selectNone'
-        ],
-        language: {
-            buttons: {
-                selectAll: 'Select all items',
-                selectNone: 'Select none'
-            }
-        }
-    });
+        new DataTable('#example', {
+            lengthMenu: [5, 10, 25],  
+            order: [[0, 'asc']],  
+            autoWidth: false,  
+        });
     </script>
 @endpush

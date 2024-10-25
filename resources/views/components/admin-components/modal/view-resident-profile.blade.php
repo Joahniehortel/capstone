@@ -23,8 +23,13 @@
                                         @if($resident->image != null)
                                             <img class="image" src="{{ Storage::url($resident->image) }}" alt="Supporting File" />
                                         @else
-                                            <img class="image" src="/images/profile-picture.png" alt="">
+                                            @if($resident->gender == 'Male')
+                                                <img class="image" src="/images/man.jpg" alt="">
+                                            @elseif($resident->gender == 'Female')
+                                                <img class="image" src="/images/user-women.png" alt="">
+                                            @endif
                                         @endif
+                                    
                                         <h3>Upload Image</h3>
                                         <p>Image size must be less than <span>2MB</span></p>
                                     </div>
@@ -249,7 +254,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="MonthlyIncome" class="label-group">Monthly Income</label>
-                                        <input type="text" class="form-control @error('MonthlyIncome') is-invalid @enderror" value="{{ $resident->MonthlyIncome }}" name="MonthlyIncome" id="MonthlyIncome" disabled>
+                                        <input type="text" class="form-control @error('MonthlyIncome') is-invalid @enderror" value="{{ $resident->MonthlyIncome == null ? 'None' : $resident->MonthlyIncome }}" name="MonthlyIncome" id="MonthlyIncome" disabled>
                                         @error('MonthlyIncome')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror

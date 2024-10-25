@@ -13,11 +13,11 @@ class MessageController extends Controller
     }
 
     public function sendSms(Request $request)
-    {   
-        $apiKey =  '13f7b618f98605a8ee2e9fb86198fbb1';
+    {
+        $apiKey = '13f7b618f98605a8ee2e9fb86198fbb1';
         $ch = curl_init();
         $parameters = array(
-            'apikey' =>$apiKey,
+            'apikey' => $apiKey,
             'number' => $request->input('mobile_number'),
             'message' => $request->input('sms_message'),
             'sendername' => 'Thesis'
@@ -33,20 +33,41 @@ class MessageController extends Controller
 
         return back();
     }
-
-    public function getAccountInfo(){
+    public function getAccountInfo()
+    {
         $response = Http::get('https://api.semaphore.co/api/v4/messages', [
             'apikey' => '13f7b618f98605a8ee2e9fb86198fbb1'
         ]);
         if ($response->successful()) {
-            $messages = $response->json(); 
-        
+            $messages = $response->json();
+            if (!empty($messages)) {
+                usort($messages, function ($a, $b) {
+                    return strtotime($b['created_at']) - strtotime($a['created_at']);
+                });
+            }
+            // Return the view with sorted messages
             return view('admin.messageLogs')->with('messages', $messages);
         } else {
-            return 'error';
+            return 'error'; 
         }
     }
-    public function getAccountInfoTable(){
+
+    public function deleteMessage($id)
+    {
+        // Replace '123' with your actual API key
+        $response = Http::withHeaders(['apikey' => '13f7b618f98605a8ee2e9fb86198fbb1'])->delete("https://api.semaphore.co/api/v4/messages/{$id}");
+
+        if ($response->successful()) {
+            // Redirect back with a success message
+            return redirect()->back()->with('success', 'Message deleted successfully!');
+        } else {
+            // Handle error
+            return redirect()->back()->with('error', 'Failed to delete the message.');
+        }
+    }
+
+    public function getAccountInfoTable()
+    {
         $messages = session('messages');
 
         return view('admin.messageLogs', compact('messages'));

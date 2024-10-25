@@ -1,21 +1,24 @@
-<div class="footer">
+<div class="footer" id="footer">
     <div class="container">
         <div class="logo">
             <div>
-                <img class="footer-logo" src="/images/dc.png" alt="Failed to load">
-                <span>EBARRIO</span>
+                <a href="{{ route('home') }}" style="text-decoration: none; color: #6D4C41; font-weight: 600">
+                    <img class="footer-logo" src="/images/dc.png" alt="Failed to load">
+                    <span style="font-weight: 900">EBARRIO</span>
+                </a>
             </div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error ut eum molestias voluptas est id, pariatur a consectetur alias dolores.</p>
+            <p>An innovative online platform designed to streamline and enhance the management of barangay services.</p>
         </div>
         <div class="footer-nav">
             <nav>
                 <ul>
                     <p class="title">Navigation</p>
-                    <li><a href="">Home</a></li>
-                    <li><a href="">Services</a></li>
-                    <li><a href="">Announcement</a></li>
-                    <li><a href="">Map</a></li>
-                    <li><a href="">About</a></li>
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/request">Request</a></li>
+                    <li><a href="/complaint">Complaint</a></li>
+                    <li><a href="/announcement">Announcement</a></li>
+                    <li><a href="/official">Officials</a></li>
+                    <li><a href="/about">About</a></li>
                 </ul>
             </nav>
         </div>
@@ -29,7 +32,7 @@
                     </div>
                     <div class="d-flex gap-2 text-cente">
                         <i class='bx bxs-phone' ></i>
-                        <p>+63 912 1312 1353</p>
+                        <p>+63 (82) 222 3022</p>
                     </div>
                 </div>
                 <div class="social-icons">
@@ -40,12 +43,8 @@
             </div>
         </div>
         <div class="subscribe">
-            <p class="title">Subscribe</p>
-            <div class="d-flex">
-                <input type="text" placeholder="Enter your email ">
-                <button>Submit</button>
-            </div>
-            <p class="mt-3">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat, quas.</p>
+            <p class="title">Address</p>
+            <p class="mt-3"><i class='bx bx-current-location'></i>Barangay 8-A, Poblacion District, LFr Selga Street, Davao City, Davao Del Sur</p>
         </div>
     </div>
     <p class="copy-rights">© Capstone 2024 - 2025</p>

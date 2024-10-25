@@ -17,11 +17,11 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">View Official</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Official Profile</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="official">
+                <div class="official-modal">
                     <form action="{{ route('official.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row d-flex justify-content-center">
@@ -60,11 +60,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="term_start" class="col-form-label">Term start</label>
-                                        <input disabled type="date" class="form-control" id="term_start" name="term_start" required>
+                                        <input value="{{ $official->term_start }}" disabled type="date" class="form-control" id="term_start" name="term_start" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="term_end" class="col-form-label">Term end</label>
-                                        <input disabled type="date" class="form-control" id="term_end" name="term_end" required>
+                                        <input disabled type="date" class="form-control" value="{{ $official->term_end }}" id="term_end" name="term_end" required>
                                     </div>
                                 </div>
                             </div>
@@ -72,21 +72,17 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="email" class="col-form-label">Email</label>
-                                <input disabled class="form-control" type="email" id="email" name="email" placeholder="Email" required>
+                                <input disabled class="form-control" type="email" id="email" value="{{ $official->email }}" name="email" placeholder="Email" required>
                             </div>
                             <div class="col">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col">
                                         <label for="gender" class="col-form-label">Gender</label>
-                                        <select class="form-select" id="gender" aria-label="Default select example" name="gender" disabled>
-                                            <option value="" {{ $official->gender == '' ? 'selected' : '' }}>Select Gender</option>
-                                            <option value="male" {{ $official->gender == 'male' ? 'selected' : '' }}>Male</option>
-                                            <option value="female" {{ $official->gender == 'female' ? 'selected' : '' }}>Female</option>
-                                        </select>
+                                        <input type="text" id="gender" class="form-control" value="{{ $official->gender }}" disabled>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email" class="col-form-label">Contact number</label>
-                                        <input disabled class="form-control" type="email" id="email" name="contact_number" placeholder="Email" required>
+                                        <input disabled class="form-control" value="{{ $official->contact_number}}" id="email" name="contact_number" placeholder="Email" required>
                                     </div>
                                 </div>
                             </div>

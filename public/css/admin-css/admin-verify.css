@@ -13,6 +13,7 @@ td, th{
 .table-container{
     background-color: white;
     padding: 25px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
 }
 
 .dt-button.buttons-pdf.buttons-html5 {

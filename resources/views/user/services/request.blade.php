@@ -32,33 +32,40 @@
     <div class="page-content">
         <x-user-components.page-title>REQUEST</x-user-components.page-title>
         <div class="card-list">
-            @foreach ($documents as $document)
+            @if(isset($documents) && count($documents) > 0)
+                @foreach ($documents as $document)
                 <div class="card" style="width: 18rem;" style="display: flex; justify-content:center">
                     @if (empty($document->image))
                         <img src="/images/dc.png" alt="Failed to load image" class="card-img-top">
-                    @else
-                        <img src="images/image.png" class="card-img-top" alt="...">
-                    @endif
-                    <div class="card-body">
-                        <div class="details" style="height: 100px">
-                            <h5 class="card-title">{{ $document->file_name }}</h5>
-                            <p class="card-text">{{ $document->file_details }}</p>
-                        </div>
-                        @if (Auth::check())
-                            @csrf
-                            <div class="d-flex justify-content-end align-items-end">
-                                <button class="request-btn" data-bs-toggle="modal" data-bs-target="#requestForm-{{ $document->id }}">Proceed 
-                                    <i class='bx bx-right-arrow-alt'></i>
-                                </button>
-                            </div>
-                            <x-user-components.request-form :requestForm="$document"
-                                modalId="requestForm-{{ $document->id }}"/>
                         @else
-                            <a href="{{ route('login') }}">Login to request this document</a>
+                            <img src="images/image.png" class="card-img-top" alt="...">
                         @endif
+                        <div class="card-body">
+                            <div class="details" style="height: 100px">
+                                <h5 class="card-title">{{ $document->file_name }}</h5>
+                                <p class="card-text">{{ Str::limit($document->file_details, 75, '...') }}</p>
+                            </div>
+                            @if (Auth::check())
+                                @csrf
+                                <div class="d-flex justify-content-end align-items-end">
+                                    <button class="request-btn" data-bs-toggle="modal" data-bs-target="#requestForm-{{ $document->id }}">Proceed 
+                                        <i class='bx bx-right-arrow-alt'></i>
+                                    </button>
+                                </div>
+                                <x-user-components.request-form :requestForm="$document"
+                                    modalId="requestForm-{{ $document->id }}"/>
+                            @else
+                                <a href="{{ route('login') }}">Login to request this document</a>
+                            @endif
+                        </div>
                     </div>
+                @endforeach
+            @else
+                <div class="no-announcements-container text-center">
+                    <img class="no_announcements" src="/images/undraw_Empty_re_opql.png" alt="" style="width: 300px">
+                    <p>There are no documents available for request right now. Please revisit us later for updates</p>
                 </div>
-            @endforeach
+            @endif
         </div>
         <img class="image" src="/images/building.png" alt="">
     </div>

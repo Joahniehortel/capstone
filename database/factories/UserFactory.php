@@ -29,7 +29,8 @@ class UserFactory extends Factory
             'contact_no' => $this->faker->phoneNumber,
             'email' => $this->faker->email(),
             'password' => $this->faker->password,
-            'isAdmin' => $this->faker->randomElement([true, false]),
+            'isAdmin' => 0,
+            'status' => 'verified'
         ];
     }
 

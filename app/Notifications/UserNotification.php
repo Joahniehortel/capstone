@@ -17,7 +17,7 @@ class UserNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct($additional_message, $notification_type, $document_message, $document_file_name, $document_status)
+    public function __construct($additional_message, $notification_type, $document_file_name, $document_status)
     {
         $this->document_status = $document_status;
         $this->notification_type = $notification_type;
@@ -59,12 +59,12 @@ class UserNotification extends Notification
     }
     
     public function toDatabase($notifiable)
-    {
-      
+    {   
         return [
             'additional_message' => $this->additional_message,
             'notification_type' => $this->notification_type,
             'message' => "The status of your document request for '{$this->document_file_name}' has been changed to '{$this->document_status}'.",
+            'status' => $this->document_status
         ];
     }
 }

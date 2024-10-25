@@ -2,20 +2,32 @@ td, th{
     font-size: 14px;
     font-weight: 400;
 }
+.btn{
+    border-radius: 0px;
+}
 .table-header{
     position: relative;
     display: grid;
     grid-template-columns: 50% 50%;
     margin-top: 25px;
     z-index: 1;
+    font-size: 14px;
 }
 .table-container table {
     font-size: 0.85rem;
+    font-size: 14px;
 }
 .table-container th, .table-container td {
+    font-size: 14px;
     padding: 0.8rem;
 }
-
+label{
+    font-size: 14px;
+}
+.official{
+    font-size: 14px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
 .table-header .add-btn{
     display: flex;
     align-items: center;
@@ -35,7 +47,7 @@ table {
     padding: 25px;
     margin-bottom: 25px;
     background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
 }
 td div, .page-link{
     color: black;

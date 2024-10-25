@@ -15,7 +15,10 @@ class DocumentRequestFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {                      
+    {
+        static $initialRequestCount = 5; 
+        static $increment = 2; 
+    
         return [
             'request_file_name' => $this->faker->randomElement([
                 'Barangay Clearance',
@@ -23,13 +26,15 @@ class DocumentRequestFactory extends Factory
                 'Certificate of Indigency',
                 'Special Permits'
             ]),
-            'number_copies' => $this->faker->numberBetween(1, 10), // Generates a random number of copies between 1 and 10
-            'preferred_date' => $this->faker->dateTimeBetween('2024-01-01', now()), // Generates a random date between 2024-01-01 and now
-            'date_requested' => $this->faker->dateTimeBetween('2024-01-01', now()), // Generates a random date for when the request was made
-            'request_purpose' => $this->faker->sentence(), // Generates a random purpose
-            'contact_no' => $this->faker->phoneNumber(), // Generates a random phone number
-            'request_status' => 'Pending', // Default status
-            'user_id' => 1, // You can assign a user ID here if needed
+            'number_copies' => $this->faker->numberBetween(1, 10), 
+            'preferred_date' => $this->faker->dateTimeBetween('2024-10-31', '2024-12-31'),
+            'date_requested' => $this->faker->dateTimeBetween('-1 year', 'now'), 
+            'request_purpose' => $this->faker->sentence(), 
+            'contact_no' => $this->faker->phoneNumber(), 
+            'request_status' => 'Pending', 
+            'user_id' => 1, 
         ];
+        
     }
+    
 }

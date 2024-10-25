@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-    <div class="page-title">
+    <div class="page-title" style="margin-bottom: 30px; margin-top:30px">
         <div class="col">
             <x-admin-components.admin-page-title>Add Official</x-admin-components.page-title>
             <nav aria-label="breadcrumb">
@@ -42,14 +42,13 @@
             </div>
         @endif
     </div>    
-    <div class="official">
+    <div class="official" style="margin-bottom: 30px">
         <form action="{{ route('official.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="w-100 d-flex justify-content-center">
                 <div class="modal-container">
                     <input type="file" id="file" name="image" hidden>
                     <div class="img-area" data-img="">
-                        <img src="/images/profile-picture.png" alt="" style="border: 1px solid #ddd; z-index: 1">
                         <i class='bx bxs-cloud-upload icon'></i>
                         <h3>Upload Image</h3>
                         <p>Image size must be less than <span>2MB</span></p>
@@ -186,8 +185,8 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end align-items-end mt-3 gap-3">
-                <a href="{{ route('admin.official') }}" class="back-btn">Back</a>
-                <button type="submit" class="add-official">Add Official</button>
+                <a href="{{ route('admin.official') }}" class="btn btn-secondary">Back</a>
+                <button type="submit" class="btn btn-primary">Add Official</button>
             </div>
         </form>
     </div>

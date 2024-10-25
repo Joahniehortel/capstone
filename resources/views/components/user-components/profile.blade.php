@@ -23,7 +23,7 @@
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">User's Profile</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="profile-modal-body">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
@@ -46,11 +46,8 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
                                 tabindex="0">
-                                {{-- <div class="mt-3 d-flex justify-content-end">
-                                        <button id="editButton" class="btn btn-primary">Edit Profile</button>
-                                    </div> --}}
                                     <div class="mb-3 mt-3 text-center">
-                                        <img src="/images/gif.gif" class="modal-profile-image" style="width: 150px">
+                                        <img src="/images/profile-picture.png" class="modal-profile-image" style="width: 150px">
                                         <p> {{ $authUser->email }}</p>
                                         @if ($authUser->status == 'to verify')
                                             <span class="badge text-bg-warning fs-6 mb-3" >
@@ -128,24 +125,27 @@
                                     @foreach ($documentRequests as $documentRequest)
                                         <div class="request_list mb-1">
                                             <div class="row requested_container" style="box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px; padding:5px">
-                                                <span class="document_type">{{ $documentRequest->request_file_name }}</span>
-                                                <span><i class='bx bx-check-square'></i> {{ $documentRequest->request_status }}</span>
-                                                <span class="document_requested_date"><i class='bx bxs-calendar-event'></i> {{ \Carbon\Carbon::parse($documentRequest->created_at)->format('F j, Y') }}</span>
+                                                <div class="col">
+                                                    <div class="d-flex flex-column">
+                                                        <span class="document_type">{{ $documentRequest->request_file_name }}</span>
+                                                        <span><i class='bx bx-check-square'></i> {{ $documentRequest->request_status }}</span>
+                                                    </div>
+                                                    <p class="document_requested_date"><i class='bx bxs-calendar-event'></i> {{ \Carbon\Carbon::parse($documentRequest->created_at)->format('F j, Y') }}</p>
+                                                </div>
+                                                <div class="col d-flex justify-content-end">
+                                                    <small class="text-muted">{{ \Carbon\Carbon::parse($documentRequest->created_at)->diffForHumans() }}</small><br>
+                                                </div>
                                                 <div class="d-flex justify-content-end gap-2">
                                                     @if( $documentRequest->request_status == 'Pending' || $documentRequest->request_status == 'Processing' )
-                                                        <button class="btn-update " type="button" data-bs-toggle="modal" data-bs-target="#modal-{{ $documentRequest->id }}">Update</button>
-                                                        <form action="{{ route('user.documentRequest.destroy', $documentRequest->id )}}" method="POST">
-                                                            @method('DELETE')
-                                                            @csrf
-                                                            <button class="btn btn-danger btn-cancel" type="submit">Cancel</button>
-                                                        </form>
+                                                        <button class="btn-update btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modal-{{ $documentRequest->id }}">Update</button>
+                                                        <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal" data-bs-target="#cancel-{{ $documentRequest->id }}">Cancel</button>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
-                                    <div class="text-center mt-3">
+                                    <div class="d-flex justify-content-center align-items-center flex-column" style="height: 500px">
                                         <img style="width: 100px" src="/images/folder.png" alt="">
                                         <p style="opacity: 0.5">No Request Found</p>
                                     </div>
@@ -155,53 +155,32 @@
                                 tabindex="0">
                                 @if(!$complaints->isEmpty())
                                     @foreach ($complaints as $complaint)
-                                        <div class="request_list">
-                                            <div class="row">
-                                                <div class="col-4 text-center" style="background-color: #1B2124">
-                                                    <img src="/images/dc.png" alt="" style="width: 100px">
+                                        <div class="request_list mb-1">
+                                            <div class="row requested_container" style="box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px; padding:5px">
+                                                <div class="col">
+                                                    <span class="document_type">{{ $complaint->complaint_title }}</span>
+                                                    <span><i class='bx bx-check-square'></i> {{ $complaint->complaint_status }}</span>
+                                                    <p class="document_requested_date"><i class='bx bxs-calendar-event'></i> {{ \Carbon\Carbon::parse($complaint->created_at)->format('F j, Y') }}</p>
                                                 </div>
-                                                <div class="col-8">
-                                                    @switch($complaint->complaint_status)
-                                                        @case('Pending')
-                                                            <span class="badge text-bg-secondary">{{ $complaint->complaint_status }}</span>
-                                                        @break
-
-                                                        @case('In Review')
-                                                            <span class="badge text-bg-info">{{ $complaint->complaint_status }}</span>
-                                                        @break
-
-                                                        @case('Resolved')
-                                                            <span class="badge text-bg-success">{{ $complaint->complaint_status }}</span>
-                                                        @break
-
-                                                        @case('Escalated')
-                                                            <span class="badge text-bg-danger">{{ $complaint->complaint_status }}</span>
-                                                        @break
-
-                                                        @case('Rejected')
-                                                            <span class="badge text-bg-dark">{{ $complaint->complaint_status }}</span>
-                                                        @break
-                                                    @default
-                                                        <span class="badge text-bg-warning">Unknown Status</span>
-                                                    @endswitch
-                                                    <p>{{ $complaint->complaint_title}}</p>
-                                                    <div class="d-flex justify-content-end">
-                                                        @if( $complaint->complaint_status == 'Pending' || $complaint->complaint_status == 'Processing' )
-                                                            <form action="{{ route('complaint.edit.details', $complaint->id ) }}" method="GET">
-                                                                @csrf
-                                                                <button type="submit">Update</button>
-                                                            </form>
-                                                        @endif
-                                                    </div>
+                                                <div class="col d-flex justify-content-end">
+                                                    <small class="text-muted">{{ \Carbon\Carbon::parse($complaint->created_at)->diffForHumans() }}</small><br>
+                                                </div>
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    @if( $complaint->complaint_status == 'Pending')
+                                                        <form action="{{ route('complaint.edit.details', $complaint->id ) }}" method="GET">
+                                                            <button type="submit" class="btn btn-primary" style="border-radius: 0px">Update</button>
+                                                        </form>
+                                                        <button class="btn btn-danger btn-cancel" type="button" data-bs-toggle="modal" data-bs-target="#cancel-complaint-{{ $complaint->id }}">Cancel</button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
-                                <div class="text-center mt-3">
-                                    <img style="width: 100px" src="/images/folder.png" alt="">
-                                    <p style="opacity: 0.5">No Complaints Found</p>
-                                </div>
+                                    <div class="d-flex justify-content-center align-items-center flex-column" style="height: 500px">
+                                        <img style="width: 100px" src="/images/folder.png" alt="">
+                                        <p style="opacity: 0.5">No Complaints Found</p>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -218,6 +197,12 @@
     @isset($documentRequests)
         @foreach ($documentRequests as $documentRequest)
             <x-user-components.edit-request :requestForm="$documentRequest" modalId="{{ $documentRequest->id }}" />
+            <x-user-components.cancel-request :requestForm="$documentRequest" modalId="{{ $documentRequest->id }}"/>
+        @endforeach
+    @endisset
+    @isset($complaints)
+        @foreach ($complaints as $complaint )
+             <x-user-components.cancel-complaint :complaintForm="$complaint" modalId="{{ $complaint->id }}"/>
         @endforeach
     @endisset
 @endauth

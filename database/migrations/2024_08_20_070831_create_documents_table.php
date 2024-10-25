@@ -21,7 +21,7 @@ return new class extends Migration
         Schema::create('document_requests', function (Blueprint $table) {
             $table->id();
             $table->string('request_file_name')->nullable();
-            $table->string('number_copies');
+            $table->string('number_copies');    
             $table->string('preferred_date')->nullable();
             $table->string('date_requested')->nullable();
             $table->string('request_purpose');

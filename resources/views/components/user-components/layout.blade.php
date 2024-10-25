@@ -24,30 +24,73 @@
     <x-user-components.navbar.navbar />
     @yield('content')
     <x-user-components.footer />
+    @if($latest_announcement)
+        <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="announcementModalLabel">{!! $latest_announcement->title !!}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if($latest_announcement->image_path)
+                        <img src="{{ Storage::url($latest_announcement->image_path) }}" alt="" style="width: 100%; height: auto; object-fit: cover;">
+                        @else
+                            <img src="{{ Storage::url($latest_announcement->image_path )}}" alt="">
+                        @endif
+                        {!! $latest_announcement->content !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if($latest_announcement)
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function () {
+                // Check if the modal has already been shown
+                if (!localStorage.getItem('announcementShown')) {
+                    var announcementModal = new bootstrap.Modal(document.getElementById('announcementModal'));
+
+                    // Show the modal
+                    announcementModal.show();
+
+                    // Add an event listener to set localStorage when the modal is hidden
+                    var modalElement = document.getElementById('announcementModal');
+                    modalElement.addEventListener('hidden.bs.modal', function () {
+                        localStorage.setItem('announcementShown', 'true');
+                    });
+                }
+            });
+        </script>
+    @endif
+
 </body>
 @stack('script')
 <script>
     var botmanWidget = {
-        aboutText: 'Start the conversation with Hi',
-        introMessage: "Hi! Welcome to eBarrio",
+        aboutText: 'Start the conversation by saying hi',
+        frameEndpoint: '/botman/chat',
         title: 'BOTMAN',
-        mainColor: '#6D4C41',
-        headerTextColor: '#FFFFFF',
+        introMessage: "Hello, {{ Auth::check() ? Auth::user()->firstname : 'there' }}! 👋 I'm here to help you with anything you need. How can I assist you today?",
+        mainColor: '#f2613f', 
+        bubbleBackground: '#f2613f', 
+        backgroundColor: '#f2613f', 
+        messageBgColor: '#f2613f', 
+        bubbleAvatarUrl: ''
     };
-    
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
 </script>
 <script src="https://cdn.jsdelivr.net/npm/botman-web-widget@0.0.20/build/js/widget.min.js"></script>
 <script>
-        const navBtn = document.getElementById("menu-btn");
-        const sideNav = document.getElementById("navbar");
+    const navBtn = document.getElementById("menu-btn");
+    const sideNav = document.getElementById("navbar");
 
-        navBtn.addEventListener("click", () => {
-            console.log('click');
-            sideNav.classList.toggle('hide');
-        });
+    navBtn.addEventListener("click", () => {
+            onsole.log('click');
+        sideNav.classList.toggle('hide');
+    });
 </script>
 
 </html>

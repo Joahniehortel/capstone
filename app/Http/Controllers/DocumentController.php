@@ -20,7 +20,7 @@ class DocumentController extends Controller
         $request->validate([
             'request_file_name' => 'required|string|max:255',
             'number_copies' => 'required|integer|min:1',
-            'preferred_date' => 'required|date|after_or_equal:today',
+            'preferred_date' => 'nullable|after_or_equal:today',
             'request_purpose' => 'required|string|max:500',
         ]);
         $dateNow = Date::now();

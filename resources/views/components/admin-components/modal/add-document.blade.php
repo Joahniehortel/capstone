@@ -1,3 +1,9 @@
+<style>
+    .btn{
+        border-radius: 0px;
+        font-size: 14px;
+    }
+</style>
 <div class="modal fade" id="addDocument" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -12,7 +18,7 @@
                     <div class="row-md-6">
                         <div class="col">
                             <label for="file_name" class="col-form-label">Document name</label>
-                            <input class="form-control" type="text" placeholder="Document Type" id="file_name"
+                            <input class="form-control" type="text" id="file_name"
                                 name="file_name">
                         </div>
                     </div>

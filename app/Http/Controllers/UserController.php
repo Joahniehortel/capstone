@@ -35,7 +35,7 @@ class UserController extends Controller
                     }
                 },
             ],
-            'new_password' => 'nullable|string|min:8|confirmed',
+            'new_password' => 'nullable|string|min:8', 
         ]);
 
         $user = User::findOrFail($id);
@@ -139,5 +139,17 @@ class UserController extends Controller
             return back()->withErrors(['error' => 'User not found.']);
         }
     }
+    public function notification(){
+        return view('user.notification');
+    }
+
+    public function markAsRead($id)
+    {
+        DB::table('notifications')
+            ->where('id', $id)
+            ->where('notifiable_id', auth()->id()) 
+            ->update(['read_at' => now()]); 
     
+        return response()->json(['success' => true]);
+    }
 }

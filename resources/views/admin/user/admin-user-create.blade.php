@@ -101,3 +101,6 @@
         </form>
     </div>
 @endsection
+@push('footer')
+    <x-admin-components.admin-footer/>
+@endpush

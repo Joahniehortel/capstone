@@ -58,7 +58,7 @@ class OfficialsController extends Controller
         }
         Official::create($validatedData);
 
-        return redirect()->back()->with('success', 'Official added successfully!');
+        return redirect('admin/official')->with('success', 'Official added successfully!');
     }
     public function show(Official $official)
     {
@@ -75,7 +75,6 @@ class OfficialsController extends Controller
     }
     public function update(Request $request, $id)
     {
-        dd($request);
         $official = Official::findOrFail($id);
         $validatedData = $request->validate([
             'firstname' => 'required|string|max:255',
@@ -87,9 +86,7 @@ class OfficialsController extends Controller
             'email' => 'required|email|max:255',
             'gender' => 'required|string|in:Male,Female',
             'contact_number' => 'required|string|max:15',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        dd($validatedData);
         $positionCount = Official::where('position', $validatedData['position'])
         ->where('id', '!=', $id) 
         ->count();

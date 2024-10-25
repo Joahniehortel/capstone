@@ -4,7 +4,15 @@
 @endpush
 @section('content')
     <div class="table-header">
-        <x-admin-components.admin-breadcrumb :page="'Edit Resident'" />
+        <div class="col mb-3">
+            <x-admin-components.admin-page-title>Edit Residents</x-admin-components.page-title>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item" aria-current="page"><a href="/admin/residents">View Residents</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Residents</li>
+                </ol>
+            </nav>
+        </div>
     </div>
     <form action="{{ route('resident.update', $resident->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -15,12 +23,10 @@
                         <div class="modal-container">
                             <input type="file" id="file" name="image" hidden>
                             <div class="img-area" data-img="">
-                                <i class='bx bxs-cloud-upload icon'></i>
                                 @if($resident->image)
                                     <img class="image" src="{{ Storage::url($resident->image) }}" alt="Supporting File" />
-                                @else
-                                    <img src="/images/profile-picture.png" class="image" alt="">
                                 @endif
+                                <i class='bx bxs-cloud-upload icon'></i>
                                 <h3>Upload Image</h3>
                                 <p>Image size must be less than <span>2MB</span></p>
                             </div>
@@ -227,8 +233,11 @@
                                 @enderror
                             </div>
                             <div class="col">
-                                <label for="ethnicity" class="label-group">Ethnicity</label>
-                                <input type="text" class="form-control @error('ethnicity') is-invalid @enderror" value="{{ $resident->ethnicity }}" name="ethnicity" id="ethnicity">
+                                <label class="label-group" for="voter">Indigenous</label>
+                                <select id="ethnicity" name="ethnicity" class="form-control @error('ethnicity') is-invalid @enderror" style="border: 1px solid #ddd">
+                                    <option value="Yes" {{ old('ethnicity') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                    <option value="No" {{ old('ethnicity') == 'No' ? 'selected' : '' }}>No</option>
+                                </select>                        
                                 @error('ethnicity')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -239,7 +248,7 @@
                         <div class="row">
                             <div class="col">
                                 <label for="occupation" class="label-group">Occupation</label>
-                                <input type="text" class="form-control" name="occupation @error('occupation') is-invalid @enderror" value="{{ $resident->occupation }}" id="occupation">
+                                <input type="text" class="form-control" name="occupation" @error('occupation') is-invalid @enderror" value="{{ $resident->occupation }}" id="occupation">
                                 @error('occupation')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -255,7 +264,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end align-items-end">
-                    <button type="submit" class="btn-submit">Submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </div>

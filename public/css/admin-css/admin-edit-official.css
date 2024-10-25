@@ -1,0 +1,131 @@
+.official {
+    background-color: white;
+    padding: 25px;
+}
+.page-title{
+    font-size: 14px;
+}
+.image-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.modal-container {
+    max-width: 400px;
+    width: 100%;
+    background: #fff;
+    padding: 30px;
+    border-radius: 30px;
+}
+.img-area {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    background: #f2f2f2;
+    margin-bottom: 30px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+#position.form-select, .col-form-label{
+    font-size: 14px;
+}
+
+.img-area .icon {
+    font-size: 100px;
+}
+
+.img-area h3 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.img-area p {
+    color: #999;
+}
+
+.img-area p span {
+    font-weight: 600;
+}
+
+.img-area img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 100;
+}
+
+.img-area::before {
+    content: attr(data-img);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: all .3s ease;
+    z-index: 200;
+}
+
+.img-area.active:hover::before {
+    opacity: 1;
+}
+label{
+    font-size: 16px;
+}
+.form-control{
+    font-size: 14px;
+}
+.btn{
+    border-radius: 0px;
+}
+.select-image {
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all .3s ease;
+    background-color: #6D4C41;
+    color: white;
+}
+
+.select-image:hover {
+    background: #443636;
+}
+.btn-save{
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 0px;
+    color: white;
+    background-color: #6D4C41;
+    border: none;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.btn-light{
+    border-radius: 0px;
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+}
+.official{
+    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+    margin-bottom: 30px;
+}

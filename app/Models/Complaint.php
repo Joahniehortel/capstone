@@ -17,6 +17,7 @@ class Complaint extends Model
         'user_id',
         'date_occured',
         'complaint_address',
+        'complaint_additional_message',
         'complaint_status'
     ];
     public function user(): BelongsTo

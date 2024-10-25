@@ -5,17 +5,19 @@
         .modal-backdrop {
             background-color: rgba(0, 0, 0, 0.3);
         }
+        .breadcrumb-item.active{
+            font-size: 14px;
+        }
     </style>
 @endpush
 @section('page-title')
     <x-admin-components.admin-page-title>Request</x-admin-components.page-title>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">View Requests</li>
+            <li class="breadcrumb-item active" aria-current="page"><span>View Requests</span></li>
         </ol>
     </nav>
 @endsection
-
     @push('assets')
         <link rel="stylesheet" href="/css/admin-css/admin-request.css">
 
@@ -98,9 +100,8 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Requesteds</th>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last name</th>
+                                    <th scope="col">Requested</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Date Requested</th>
                                     <th scope="col"></th>
@@ -111,8 +112,7 @@
                                     <tr>
                                         <td>{{ $document_request->id }}</td>
                                         <td>{{ $document_request->request_file_name }}</td>
-                                        <td>{{ $document_request->firstname }}</td>
-                                        <td>{{ $document_request->lastname }}</td>
+                                        <td>{{ $document_request->firstname }} {{ $document_request->lastname }}</td>
                                         <td>
                                             @switch($document_request->request_status)
                                                 @case('Pending')
@@ -127,7 +127,7 @@
                                                     <span>Unknown Status</span>
                                             @endswitch
                                         </td>
-                                        <td>{{ $document_request->created_at }}</td>
+                                        <td style="text-align: start">{{ \Carbon\Carbon::parse($document_request->created_at)->format('F j, Y, g:i A') }}</td>
                                         <td>
                                             <button class="btn btn-secondary" data-bs-toggle="modal"
                                                 data-bs-target="#{{ $document_request->id }}">UPDATE</button>
@@ -147,8 +147,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Requested</th>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last name</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Date Requested</th>
                                     <th scope="col"></th>
@@ -159,19 +158,18 @@
                                     <tr>
                                         <td>{{ $ready->id }}</td>
                                         <td>{{ $ready->request_file_name }}</td>
-                                        <td>{{ $ready->firstname }}</td>
-                                        <td>{{ $ready->lastname }}</td>
+                                        <td>{{ $ready->firstname }} {{ $ready->lastname }}</td>
                                         <td>
                                             <span class="badge text-bg-success">{{ $ready->request_status }}</span>
                                         </td>
-                                        <td>{{ $ready->created_at }}</td>
+                                        <td style="text-align: start">{{ \Carbon\Carbon::parse($ready->created_at)->format('F j, Y, g:i A') }}</td>
                                         <td>
                                             <div class="d-flex gap-3">
-                                                <form action="{{ route('documentRequest.update', $ready->id) }}" method="POST">
+                                                {{-- <form action="{{ route('documentRequest.update', $ready->id) }}" method="POST">
                                                     @csrf
                                                         <input type="hidden" name="status" value="Completed">
                                                         <button class="btn btn-success" type="submit">Completed</button>
-                                                </form>
+                                                </form> --}}
                                                 <button class="btn btn-secondary"  data-bs-toggle="modal"
                                                 data-bs-target="#{{ $ready->id }}">UPDATE</button>
                                             </div>
@@ -192,8 +190,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Requested</th>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last name</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Date Requested</th>
                                     <th scope="col"></th>
@@ -204,12 +201,11 @@
                                     <tr>
                                         <td>{{ $completed->id }}</td>
                                         <td>{{ $completed->request_file_name }}</td>
-                                        <td>{{ $completed->firstname }}</td>
-                                        <td>{{ $completed->lastname }}</td>
+                                        <td>{{ $completed->firstname }} {{ $completed->lastname }}</td>
                                         <td>
                                             <span class="badge text-bg-success">{{ $completed->request_status }}</span>
                                         </td>
-                                        <td>{{ $completed->created_at }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($completed->created_at)->format('l, h:i A') }}</td>
                                         <td>
                                             <div class="d-flex gap-3">
                                                 <button class="btn btn-secondary" data-bs-toggle="modal"
@@ -238,8 +234,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Requested</th>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last name</th>
+                                    <th scope="col">Name</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Date Requested</th>
                                     <th scope="col"></th>
@@ -250,21 +245,22 @@
                                     <tr>
                                         <td>{{ $rejected->id }}</td>
                                         <td>{{ $rejected->request_file_name }}</td>
-                                        <td>{{ $rejected->firstname }}</td>
-                                        <td>{{ $rejected->lastname }}</td>
+                                        <td>{{ $rejected->firstname }} {{ $rejected->lastname }}</td>
                                         <td>
                                             <span class="badge text-bg-danger">{{ $rejected->request_status }}</span>
                                         </td>
-                                        <td>{{ $rejected->created_at }}</td>
+                                        <td style="text-align: start">{{ \Carbon\Carbon::parse($rejected->created_at)->format('F j, Y, g:i A') }}</td>
                                         <td>
-                                            <button class="btn btn-secondary" data-bs-toggle="modal"
-                                            data-bs-target="#{{ $rejected->id }}">UPDATE</button>
-                                            {{-- <form action="{{ route('documentRequest.destroy', $rejected->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-danger" type="submit">Delete</button>
-                                            </form> --}}
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#{{ $rejected->id }}">UPDATE</button>
+                                                <form action="{{ route('documentRequest.destroy', $rejected->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                                </form>
+                                            </div>  
                                         </td>
                                     </tr>
                                     <x-admin-components.modal.request-modal :documentRequest="$rejected"

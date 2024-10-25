@@ -2,7 +2,7 @@
 @props(['modalId', 'announcement'])
 <style>
     .announcement_image{
-        width: 500px;
+        width: 150px;
     }
 </style>
 <div class="modal fade" id="{{ $modalId }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -10,12 +10,12 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class='bx bxs-megaphone'></i> ANNOUNCEMENT</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">ANNOUNCEMENT</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="announcement-logo text-center mb-4">
-                    <img src="/images/dc.png" alt="" style="width: 175px" class="mb-4">
+                    <img class="barangay_logo mb-3" src="/images/dc.png" alt="" style="width: 100px" class="mb-4">
                     <div class="details" style="line-height: 0.3">
                     <div class="details" style="line-height: 0.3">
                         <p>Republic of the Philippines</p>
@@ -31,7 +31,6 @@
                     </div>
                     <p>{!! $announcement->content !!}</p>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -28,7 +28,7 @@ aria-labelledby="{{ $modalId }}Label">
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="email">Email</label>
-                            {{-- <input type="text" value="{{ $documentRequest->email }}" id="email" class="form-control" disabled> --}}
+                            <input type="text" value="{{ $documentRequest->email }}" id="email" class="form-control" disabled>
                         </div>
                     </div>
                     <div class="row">
@@ -52,23 +52,24 @@ aria-labelledby="{{ $modalId }}Label">
                                 <option value="Pending" {{ $documentRequest->request_status == 'Pending' ? 'selected' : '' }}>Pending</option>
                                 <option value="Processing" {{ $documentRequest->request_status == 'Processing' ? 'selected' : '' }}>Processing</option>
                                 <option value="Ready for pick up" {{ $documentRequest->request_status == 'Ready for pick up' ? 'selected' : '' }}>Ready to pick up</option>
+                                <option value="Completed" {{ $documentRequest->request_status == 'Completed' ? 'selected' : '' }}>Completed</option>
                                 <option value="Rejected" {{ $documentRequest->request_status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label for="request_purpose" class="col-form-label">Reason of request</label>
+                        <label for="request_purpose" class="col-form-label">Reason sof request</label>
                         <textarea class="form-control" name="request_purpose" id="request_purpose" cols="10" rows="5" disabled>{{ $documentRequest->request_purpose}}</textarea>
                     </div>
                     @if($documentRequest->request_status != 'Completed' && $documentRequest->request_status != 'Ready for pick up')
                         <div>
-                            <label for="additional_message" class="col-form-label">Additional Message</label>
+                            <label for="additional_message" class="col-form-label">Note</label>
                             <textarea class="form-control" name="additional_message" id="additional_message" cols="10" rows="5"></textarea>
                         </div>
                     @endif
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"> Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
             </form>

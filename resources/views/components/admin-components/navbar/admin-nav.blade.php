@@ -76,7 +76,7 @@
         </li>
         <li class="dropdownlist">
             <div class="icon-links {{ Request::is('admin/official') || Request::is('admin/official/add') || Request::is('admin/official/edit/*') ? 'active' : ''}}">
-                <a href="#">
+                <a href="javascript:void(0);" onclick="toggleSubmenu(this)">
                     <i class='bx bx-user-pin'></i>
                     <span class="link_name">Officials</span>
                 </a>
@@ -101,6 +101,12 @@
 </div>
 
 @push('scripts')
+<script>
+    function toggleSubmenu(element) {
+        const submenu = element.closest('.icon-links').nextElementSibling; // Get the submenu
+        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block'; // Toggle visibility
+    }
+</script>
     <script>
         let dropdownItems = document.querySelectorAll('.dropdownlist');
         dropdownItems.forEach(item => {
@@ -117,7 +123,6 @@
             });
         });
         let arrow = document.querySelectorAll('.arrow');
-        console.log(arrow)
         for (var i = 0; i < arrow.length; i++){
             arrow[i].addEventListener("click", (e)=>{
                 console.log(e)
@@ -131,8 +136,6 @@
         let content = document.querySelector('#content');
         let menuBtn = document.querySelector('#menu-btn');
 
-        console.log('sadsa');
-        console.log(content);
         sidebarBtn.addEventListener("click", ()=>{
             sidebar.classList.toggle("close");
             content.classList.toggle("collapsed");

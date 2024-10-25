@@ -37,23 +37,28 @@
                         <th>Status</th>
                         <th>Sent At</th>
                         <th>Date sent</th>
+                        {{-- <th></th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($messages as $message)
-                        <tr>
-                            <td>{{ $message['message'] }}</td>
-                            <td>{{ $message['status'] }}</td>
-                            <td>{{ $message['recipient'] }}</td> 
-                            <td>{{ $message['created_at']}}</td>
-                        </tr>
-                    @endforeach
+                    <tr>
+                        <td>{{ $message['message'] }}</td>
+                        <td>{{ $message['status'] }}</td>
+                        <td>{{ $message['recipient'] }}</td> 
+                        <td style="text-align: start">{{ \Carbon\Carbon::parse($message['created_at'])->format('F j, Y, g:i A') }}</td>
+                        {{-- <td>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#{{ $message['message_id'] }}">Delete</button>
+                        </td> --}}
+                    </tr>
+                @endforeach
+                
                 </tbody>
             </table>
         @else
         <p>No messages found.</p>
         @endif
-    </div>
+    </div>  
 @endsection
 @push('footer')
     <x-admin-components.admin-footer/>

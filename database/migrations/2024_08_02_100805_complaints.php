@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('complaint_title');
             $table->string('complaint_image')->nullable(); 
             $table->string('date_occured'); 
+            $table->string('hour_occured')->nullable();
             $table->string('complaint_address');
             $table->string('complaint_detail');
+            $table->string('complaint_additional_message')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->string('complaint_status')->default('Pending');
             $table->timestamps();

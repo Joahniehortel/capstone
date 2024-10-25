@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VerifyController;
-use App\Http\Controllers\BlotterController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\DocumentController;
@@ -64,22 +63,18 @@ Route::middleware('auth')->group(function (){
 Route::post('/complaints/store', [ComplaintsController::class, 'submitComplain'])->name('complaint.store');
 Route::get('/complaints/edit/{id}', [ComplaintsController::class, 'editComplaintDetails'])->name(name: 'complaint.edit.details');
 Route::post('/complaints/update/{id}', [ComplaintsController::class, 'updateComplaintDetails'])->name(name: 'complaint.update.details');
+Route::post('/complaints/destroy/{id}', [ComplaintsController::class, 'destroy'])->name(name: 'complaint.destroy');
 
 Route::get('/officials', function(){
     return view('user.official');
 });
-
-Route::get('/blotter', function(){
-    return view('user.blotter');
-})->name('user.blotter');
-
-Route::put('/blotter/store', [BlotterController::class, 'store'])->name('blotter.store');
-
 Route::get('/announcements', [AnnouncementController::class, 'viewIndex'])->name('user.announcements');
 Route::get('/map', function(){
     return view('user.map');
 });
 Route::get('/profile', [UserController::class, 'index'])->name('user.profile');
+Route::get('/notification', [UserController::class, 'notification'])->name('user.notification');
+Route::post('/notifications/{id}/mark-as-read', [UserController::class, 'markAsRead'])->name('notifications.markAsRead');
 
 Route::get('/about', function(){
     return view('user.about');
@@ -96,8 +91,8 @@ Route::prefix('admin')->group(function(){
 });
 Route::prefix('admin')->middleware('admin')->group(function() {
     Route::get('/dashboard', [Chart::class, 'barChart'])->name('admin.dashboard');
+    Route::post('/admin/dashboard/filter', [Chart::class, 'filterDashboardData'])->name('admin.dashboard.filter');
     Route::post('/reset', [AdminController::class, 'changePassword'])->name('admin.changepass');
-    Route::get('/blotters', [BlotterController::class, 'index'])->name('blotters.index');
     Route::get('/request', [RequestController::class, 'index'])->name('admin.request');
     Route::post('/request/update/{id}', [RequestController::class, 'update'])->name('documentRequest.update');
     Route::delete('/request/destroy/{id}', [RequestController::class, 'destroy'])->name('documentRequest.destroy');
@@ -109,6 +104,7 @@ Route::prefix('admin')->middleware('admin')->group(function() {
     Route::get("/residents/edit/{id}", [ResidentsController::class, 'edit'])->name('resident.edit');
     Route::post('/residents/update/{resident}', [ResidentsController::class, 'update'])->name('resident.update');
     Route::post('/residents/delete/{resident}', [ResidentsController::class, 'destroy'])->name('resident.destroy');
+    Route::get('/residents/pdf/', [ResidentsController::class, 'residentsPdf'])->name('resident.pdf');
     Route::get('/residents/data', function(){
         $residents = Resident::all(); 
 
@@ -117,6 +113,7 @@ Route::prefix('admin')->middleware('admin')->group(function() {
     Route::get('/message', [MessageController::class, 'index'])->name('admin.message');
     Route::post('/message', [MessageController::class, 'sendSms'])->name('admin.message.sms');
     Route::get('/message/logs', [MessageController::class, 'getAccountInfo'])->name('admin.message.logs');
+    Route::delete('/messages/{id}', [MessageController::class, 'deleteMessage'])->name('messages.delete');
     Route::get('/message/view-logs', [MessageController::class, 'getAccountInfoTable'])->name('admin.message.view.logs');
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('admin.announcement');
     Route::get('announcements/create', [AnnouncementController::class, 'create'])->name('admin.announcement.create');

@@ -2,7 +2,6 @@
 
 @push('assets')
     <link rel="stylesheet" href="/css/admin-css/admin-residents.css">
-
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
@@ -25,11 +24,14 @@
                 </ol>
             </nav>
         </div>
-        <div class="col" style="display: flex; justify-content:end; align-items:center">
-            <a href="{{ route('resident.addpage') }}" class="btn btn-primary"><i class='bx bx-user-plus'></i>Add resident</a>
-        </div>
+        {{-- <div class="col" style="display: flex; justify-content:end; align-items:center;">
+            <a href="{{ route('resident.pdf') }}" class="btn btn-info">Export Data</a>
+        </div> --}}
     </div>
     <div class="table-container">
+        <div class="col" style="display: flex; justify-content:end; align-items:center;">
+            <a href="{{ route('resident.addpage') }}" class="btn btn-primary">Add resident</a>
+        </div>
         <div class="row">
             <div class="col filter-container">
                 <label for="pwd-filter">PWD</label>
@@ -91,10 +93,14 @@
                         <td class="details-control"><i class='bx bxs-right-arrow child-row'></i></td> 
                         <td>{{ $resident->id }}</td>
                         <td class="text-center">
-                            @if(empty($resident->image))
-                                <img src="{{ asset('images/profile-picture.png') }}" class="admin-icon" alt="Default Profile Picture">
+                            @if($resident->image != null)
+                                <img class="image" style="width: 50px; height:50px" src="{{ Storage::url($resident->image) }}" alt="Supporting File" />
                             @else
-                                <img src="{{ Storage::url($resident->image) }}" alt="Resident Image" style="width:50px">
+                                @if($resident->gender == 'Male')
+                                    <img src="/images/man.jpg" style="width: 50px; height:50px;" alt="Default Profile Picture">
+                                @elseif($resident->gender == 'Female')
+                                    <img src="/images/user-women.png" style="width: 50px; height:50px;" alt="Default Profile Picture">
+                                @endif
                             @endif
                         </td>
                         <td>{{ $resident->firstName }} {{ $resident->lastName }} </td>
@@ -110,20 +116,19 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <form id="edit-form-${row.id}" action="{{ route('resident.edit', $resident->id)}}" method="GET">
-                                        @csrf
                                         <li>
-                                            <a href="javascript:document.getElementById('edit-form-${row.id}').submit()" class="dropdown-item">Edit</a>
+                                            <a href="javascript:document.getElementById('edit-form-${row.id}').submit()" class="dropdown-item" style="cursor: pointer">Edit</a>
                                         </li>
                                     </form>
                                     <li>
                                         <a class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#viewResidentProfileModal-{{ $resident->id }}">
+                                            data-bs-target="#viewResidentProfileModal-{{ $resident->id }}" style="cursor: pointer">
                                             View
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#deleteResident-{{ $resident->id }}">
+                                            data-bs-target="#deleteResident-{{ $resident->id }}" style="cursor: pointer">
                                             Delete
                                         </a>
                                     </li>

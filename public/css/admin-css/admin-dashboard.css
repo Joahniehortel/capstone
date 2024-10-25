@@ -1,4 +1,9 @@
-
+.btn{
+    border-radius: 0px;
+}
+.pieChart{
+    
+}
 .page-title {
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
@@ -14,6 +19,11 @@
     justify-content: center;
     background-color: #fff;
     position: relative;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+.box-title{
+    font-size: 16px;
+    font-weight: 500;
 }
 label{
     font-size: 14px;
@@ -23,13 +33,12 @@ label{
     border: none;
     font-size: 14px;
     background-color: white;
-    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 .box {
-    border-radius: 5px;
     padding: 16px;
     background-color: #fff;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
 .box-container .box {
@@ -99,16 +108,24 @@ label{
 .box {
     color: white;
 }
-
+.icon-container{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
 .box .bx {
-    border: 2px solid white;
     margin-bottom: 5px;
     font-size: 30px;
     color: white;
-    border-radius: 5px;
     padding: 10px;
     display: flex;
     align-items: center;
+    background-color: white;
+    color: black;
+    border-radius: 50%;
+}
+.residentChart{
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 .charts {
     position: relative;
@@ -117,6 +134,10 @@ label{
     padding: 25px;
     gap: 50px;
     background-color: #fff;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+p{
+    font-size: 14px;
 }
 .pieChart{
     width: 35%;

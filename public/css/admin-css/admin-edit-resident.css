@@ -14,7 +14,9 @@
     padding: 30px;
     border-radius: 30px;
 }
-
+.breadcrumb-item{
+    font-size: 14px;
+}
 .img-area {
     position: relative;
     width: 100%;
@@ -56,7 +58,16 @@
     object-position: center;
     z-index: 100;
 }
-
+.img-area{
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative; 
+    padding: 20px;
+    background-image: url("/images/profile-picture.png"); 
+    background-size: cover;
+    background-position: center; 
+    border: 1px solid #ddd; 
+}
 .img-area::before {
     content: attr(data-img);
     position: absolute;
@@ -85,8 +96,7 @@
     display: block;
     width: 100%;
     padding: 5px 10px;
-    font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
     transition: all .3s ease;
@@ -95,24 +105,15 @@
     color: white;
     box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
 }
-.btn-submit{
-    display: block;
-    padding: 10px 10px;
-    font-weight: 400;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    transition: all .3s ease;
-    border-radius: 0px;
-    background-color: #6D4C41;
-    color: white;
-    box-shadow: rgba(56, 107, 192, 0.3) 0px 8px 9px -4px, rgba(56, 107, 192, 0.2) 0px 4px 18px 0px;
-}
+
 .form-control:focus{
     box-shadow: none;
 }
 .form-control{
     width: 100%;
+}
+.btn{
+    border-radius: 0px;
 }
 input[type="text"], #voter, #maritalStatus, #PWD, #ethnicity{
     border-radius: 0px;

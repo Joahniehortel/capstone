@@ -10,6 +10,7 @@
             <x-admin-components.admin-page-title>Add Residents</x-admin-components.page-title>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
+                    <li class="breadcrumb-item" aria-current="page"><a href="/admin/residents">View Residents</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Add Residents</li>
                 </ol>
             </nav>
@@ -213,7 +214,7 @@
                     </div>
                     <div class="col">
                         <label class="label-group" for="Religion">Religion</label>
-                        <input type="text" class="form-control @error('religion') is-invalid @enderror" name="religion" id="Religion">
+                        <input type="text" class="form-control @error('religion') is-invalid @enderror" name="religion" id="Religion" value="{{ old('religion')}}">
                     </div>
                     @error('religion')
                         <p class="text-danger">{{ $message }}</p>
@@ -233,8 +234,11 @@
                                 @enderror
                             </div>
                             <div class="col">
-                                <label for="ethnicity" class="label-group">Ethnicity</label>
-                                <input type="text" class="form-control @error('ethnicity') is-invalid @enderror" value="{{ old('ethnicity') }}" name="ethnicity" id="ethnicity">
+                                <label class="label-group" for="voter">Indigenous</label>
+                                <select id="ethnicity" name="ethnicity" class="form-control @error('ethnicity') is-invalid @enderror" style="border: 1px solid #ddd">
+                                    <option value="Yes" {{ old('ethnicity') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                    <option value="No" {{ old('ethnicity') == 'No' ? 'selected' : '' }}>No</option>
+                                </select>                        
                                 @error('ethnicity')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -244,13 +248,16 @@
                     <div class="col">
                         <div class="row">
                             <div class="col">
-                                <label for="occupation" class="label-group">Occupation</label>
-                                <input type="text" class="form-control" name="occupation @error('occupation') is-invalid @enderror" value="{{ old('occupation')}}" id="occupation">
+                                <label for="occupation" class="label-group">Employed</label>
+                                <select id="occupation" name="occupation" class="form-select @error('occupation') is-invalid @enderror" style="border: 1px solid #ddd; border-radius: 0px">
+                                    <option value="Yes" {{ old('occupation') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                    <option value="No" {{ old('occupation') == 'No' ? 'selected' : '' }}>No</option>
+                                </select> 
                                 @error('occupation')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="col">
+                            <div class="col">   
                                 <label for="MonthlyIncome" class="label-group">Monthly Income</label>
                                 <input type="text" class="form-control @error('MonthlyIncome') is-invalid @enderror" value="{{ old('MonthlyIncome') }}" name="MonthlyIncome" id="MonthlyIncome">
                                 @error('MonthlyIncome')

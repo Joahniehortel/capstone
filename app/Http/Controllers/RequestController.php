@@ -45,13 +45,12 @@ class RequestController extends Controller
         $document_requests = DocumentRequest::where('id', $id)->first();
         $document_requests->request_status = $request->input('status');
         $document_requests->additional_message = $request->input('additional_message');
-        $document_requests->save();
-
         $document_status = $document_requests['request_status'];
         $document_file_name = $document_requests['request_file_name'];
         $notification_type = 'Document Request';
         $additional_message = $request->input('additional_message');
-        $document_requests->user->notify(new UserNotification($document_requests, $notification_type, $additional_message, $document_file_name, $document_status));
+        $document_requests->user->notify(new UserNotification($additional_message, $notification_type, $document_file_name, $document_status));
+        $document_requests->save();
         return redirect()->route('admin.request')->with('success', 'Document request updated successfully.');
     }
     

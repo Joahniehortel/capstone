@@ -21,7 +21,7 @@
     @endif
     <div class="hero-section">
         <div class="text-container">
-            <h1 class="fs-1">Welcome to <span class="logo-name">EBARRIO</span>!</h1>
+            <h1 class="fs-1">Welcome to <span class="logo-name" style="font-weight: 600">EBARRIO</span>!</h1>
             <p>eBarrio simplifies barangay services, letting you request documents, <br> file complaints, and stay updated
                 with ease.</p>
             <a href="{{ route('user.request') }}" class="cta-btn">Request Now</a>
@@ -131,34 +131,40 @@
         <div class="section-details text-center">
             <h1 class="fs-3 text-center">Latest Announcements</h1>
             <p>Stay Informed with the Latest Updates</p>
-            <div class="d-flex flex-wrap justify-content-center gap-3 mb-3">
-                @if(!$latestAnnouncements->isEmpty())
-                    @foreach ($latestAnnouncements as  $latestAnnouncement)
-                        <div class="card m-2" style="width: 18rem;">
-                            @if (!empty($latestAnnouncement->image_path))
-                                <img src="{{ asset('storage/' . $latestAnnouncement->image_path) }}" class="card-img-top" alt="Announcement Image">
-                            @else
-                                <img src="/images/barangay-image.png" class="card-img-top" alt="Default Image">
-                            @endif
-                            <div class="card-body">
-                                <h5 style="font-size: 16px;" class="card-title">{!! $latestAnnouncement->title !!}</h5>
-                                {{-- <p class="card-text" style="opacity: 1">{!! Str::limit($latestAnnouncement->content, 200, '...') !!}</p> --}}
-                            </div>
-                            <div class="card-footer">
-                                <a class="view-details" data-bs-toggle="modal" data-bs-target="#{{ $latestAnnouncement->id }}">View Details</a>
-                            </div>
-                        </div>
-                    {{-- <x-admin-components.modal.view-announcement-user :announcement="$latestAnnouncement" modalId="{{ $latestAnnouncement->id }}"/> --}}
-                    @endforeach
-                @else
+            <div class="list">
+                @if ($latestAnnouncements->isNotEmpty())
                     <div>
+                        <ul class="announcement-list-container w-100">
+                            @foreach ($latestAnnouncements as $latestAnnouncement)
+                                <li>
+                                    <div class="announcement-container">    
+                                        <div class="row">
+                                            <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
+                                                @if(!empty($latestAnnouncement->image_path))
+                                                    <img src="{{ Storage::url($latestAnnouncement->image_path) }}" alt="Announcement Image" class="img-fluid">
+                                                @else
+                                                    <img src="/images/barangaylogo.png" alt="Announcement Image" style="width: 150px" class="img-fluid">
+                                                @endif
+                                            </div>  
+                                            <div class="col-12 col-md-10 text-start">
+                                                <p class="announcement_title" style="font-weight: bold; font-style: 16px; color:#6D4C41">{{ $latestAnnouncement->title }}</p>
+                                                <p style="font-size: 14px"><i class='bx bxs-calendar-check'></i>{{ \Carbon\Carbon::parse($latestAnnouncement->created_at)->format('F j, Y') }}</p>
+                                                <p class="announcement_content" style="font-weight: 400">{{Str::words(strip_tags($latestAnnouncement->content), 60, '...')}}</p>
+                                                <x-admin-components.modal.view-announcement-user :announcement="$latestAnnouncement" modalId="{{ $latestAnnouncement->id }}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary w-100" style="background: transparent; color:black; border:none;" data-bs-toggle="modal" data-bs-target="#{{ $latestAnnouncement->id }}">View Details</button>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @else
+                    <div class="no-announcements-container text-center">
                         <img class="no_announcements" src="/images/undraw_Empty_re_opql.png" alt="">
                         <p>No announcements available at this time.</p>
                     </div>
                 @endif
-            </div>            
-            <div class="d-flex justify-content-center">
-                <button class="view-more">View More</button>
             </div>
         </div>
     </div>

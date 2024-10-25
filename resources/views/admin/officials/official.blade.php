@@ -15,6 +15,18 @@
     <script src="https://cdn.datatables.net/buttons/3.1.1/js/buttons.html5.min.js"></script>
 @endpush
 @section('content')
+    @if ($errors->any())
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {{ session('error-toast') }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="table-header">
         <div class="col mb-3">
             <x-admin-components.admin-page-title>Officials</x-admin-components.page-title>
@@ -25,7 +37,7 @@
             </nav>
         </div>
         <div class="col add-btn">
-            <a class="btn btn-primary" style="font-size: 12px" href="{{ route('official.create') }}"><i class='bx bx-user-plus'></i>Add Official</a>
+            <a class="btn btn-primary" style="font-size: 12px" href="{{ route('official.create') }}">Add Official</a>
         </div>
     </div>
     <div class="table-container">
@@ -74,7 +86,6 @@
                                 <ul class="dropdown-menu">
                                     <form id="edit-form-{{ $official->id }}"
                                         action="{{ route('official.edit', $official->id) }}" method="GET">
-                                        @csrf
                                         <li> <a class="dropdown-item"
                                                 href="javascript:document.getElementById('edit-form-{{ $official->id }}').submit()">Edit</a>
                                         </li>

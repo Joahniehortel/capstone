@@ -7,11 +7,17 @@
     padding: 25px;
     margin-bottom: 25px;
     width: 100%;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 .table-container th, .table-container td {
     padding: 0.8rem;
 }
-
+.btn{
+    border-radius: 0px;
+}
+.breadcrumb-item.active{
+    font-size: 14px;
+}
 #residents {
     width: 100% !important;
 }

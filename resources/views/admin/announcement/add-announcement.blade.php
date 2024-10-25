@@ -6,7 +6,7 @@
 @endpush
 
 @section('content')
-    <div class="page-title">
+    <div class="page-title" style="margin-bottom: 30px; margin-top:30px">
         <div class="col">
             <x-admin-components.admin-page-title>Add Announcement</x-admin-components.page-title>
             <nav aria-label="breadcrumb">
@@ -17,7 +17,7 @@
             </nav>
         </div>
     </div>
-    <div class="main-container">
+    <div class="main-container mb-3">
         @if (session('error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="fas fa-exclamation-circle"></i> 
@@ -68,7 +68,7 @@
                 
                         inputFile.addEventListener('change', function() {
                             const image = this.files[0];
-                            if (image.size < 2000000) {
+                            if (image.size < 10000000) {
                                 const reader = new FileReader();
                                 reader.onload = () => {
                                     const allImg = imgArea.querySelectorAll('img');
@@ -94,7 +94,7 @@
                     </div>
                 @endif
                 <div class="d-flex justify-content-end align-items-end">
-                    <button class="publish-btn mt-3" type="submit">Publish <i class='bx bx-send'></i></button>
+                    <button class="btn btn-primary mt-3" type="submit" style="font-size: 12px">Publish</button>
                 </div>
         </form>
     </div>

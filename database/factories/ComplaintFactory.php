@@ -22,7 +22,7 @@ class ComplaintFactory extends Factory
             'date_occured' => $this->faker->dateTimeBetween('2024-01-01', now())->format('Y-m-d H:i:s'), // Random date between January 2024 and now
             'complaint_address' => $this->faker->address, // Generate a random address
             'complaint_detail' => $this->faker->sentence(1), // Generate a random complaint detail
-            // 'user_id' => $this->faker->randomElement([1, 2, 3]), // Random user ID; replace with actual user IDs if needed
+            'user_id' => 1, 
             'complaint_status' => 'Pending', // Default status
             'created_at' => $this->faker->dateTimeBetween('2024-01-01', now()),
         ];

@@ -5,7 +5,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">ANNOUNCEMENT <i class='bx bxs-megaphone'></i></h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">ANNOUNCEMENT</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -21,8 +21,10 @@
                 </div>
                 <div class="d-flex justify-content-center mt-5 mb-3">
                     <div class="text-start w-100">
-                        <h1 class="text-center">{{ $announcement->title }}</h1>
-                        <img class="image" src="{{ Storage::url($announcement->image_path) }}" alt="Supporting File" />
+                        <h1 style="font-size: 24px" class="text-center">{{ $announcement->title }}</h1>
+                        <div class="w-100 text-center">
+                            <img class="image" style="width: 300px" src="{{ Storage::url($announcement->image_path) }}" alt="Supporting File" />
+                        </div>
                         <p>{!! $announcement->content !!}</p>
                     </div>
                 </div>

@@ -88,6 +88,9 @@
         </table>
     </div>
 @endsection
+@push('footer')
+    <x-admin-components.admin-footer/>
+@endpush
 @push('scripts')
 <script>
     $(document).ready(function() {
