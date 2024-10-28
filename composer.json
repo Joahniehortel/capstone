@@ -16,7 +16,7 @@
         "livewire/livewire": "^3.5",
         "php-ai/php-ml": "^0.10.0",
         "php-http/guzzle7-adapter": "^1.0",
-        "power-components/livewire-powergrid": "^5.10",
+     
         "railsware/mailtrap-php": "^2.0",
         "twilio/sdk": "^8.2"
     },
