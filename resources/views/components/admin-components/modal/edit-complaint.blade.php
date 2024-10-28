@@ -35,23 +35,22 @@
                         @endphp
                         @if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']))
                             <div class="text-center">
-                                <img src="{{ Storage::url($complaint->complaint_image) }}" alt="Complaint Image"
-                                width="50%" />
+                                <img src="{{ Storage::url($complaint->complaint_image) }}" alt="Complaint Image" width="50%" />
                                 <div class="mt-2">
-                                    <a href="{{ Storage::url($complaint->complaint_image) }}" download class="btn btn-primary">
+                                    <a href="{{ asset($complaint->complaint_image) }}" download class="btn btn-primary">
                                         Download Image
                                     </a>
                                 </div>
                             </div>
                         @elseif ($extension === 'pdf')
                             <div style="padding: 20px">
-                                <iframe src="{{ Storage::url($complaint->complaint_image) }}" width="100%"
+                                <iframe src="{{ Storage::url($complaint->complaint_image)}}" width="100%"
                                     height="300px"></iframe>
                             </div>
                         @elseif (in_array($extension, ['mp4', 'avi', 'mov', 'wmv', 'mkv']))
                             <div style="padding: 20px">
                                 <video controls width="100%">
-                                    <source src="{{ Storage::url($complaint->complaint_image) }}"
+                                    <source src="{{ Storage::url($complaint->complaint_image)}}"
                                         type="video/{{ pathinfo($complaint->complaint_image, PATHINFO_EXTENSION) }}">
                                     Your browser does not support the video tag.
                                 </video>
@@ -59,7 +58,7 @@
                         @elseif (in_array($extension, ['mp3', 'wav', 'ogg']))
                             <div style="padding: 20px; display:flex; justify-content:center">
                                 <audio controls>
-                                    <source src="{{ Storage::url($complaint->complaint_image) }}"
+                                    <source src="{{ Storage::url($complaint->complaint_image)}}"
                                         type="audio/{{ pathinfo($complaint->complaint_image, PATHINFO_EXTENSION) }}">
                                     Your browser does not support the audio element.
                                 </audio>

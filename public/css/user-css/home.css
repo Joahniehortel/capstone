@@ -311,4 +311,43 @@ ul{
         margin: 0px;
         padding: 10px;
     }
+    *{
+        margin: 0px;
+    }
+    .navbar-toggler{
+        margin: 0px;
+        padding-right: 10px;
+    }
+    .about-image{
+        display: none;
+    }
+    .numbers{
+        height: 25px;
+        width: 50px;
+    }
+    .text-start.mt-3{
+        text-align: center;
+    }
+    .about{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        margin: 0px;
+        padding: 10px;
+    }
+    .section-details{
+        text-align: center;
+    
+    }
+    .announcements{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .about-text-container{
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
 }

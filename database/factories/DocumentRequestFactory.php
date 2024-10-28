@@ -27,13 +27,15 @@ class DocumentRequestFactory extends Factory
                 'Special Permits'
             ]),
             'number_copies' => $this->faker->numberBetween(1, 10), 
-            'preferred_date' => $this->faker->dateTimeBetween('2024-10-31', '2024-12-31'),
+            'preferred_date' => $this->faker->dateTimeBetween('-5 years', 'now'), // Random date in the last 5 years
             'date_requested' => $this->faker->dateTimeBetween('-1 year', 'now'), 
             'request_purpose' => $this->faker->sentence(), 
             'contact_no' => $this->faker->phoneNumber(), 
             'request_status' => 'Pending', 
             'user_id' => 1, 
+            'created_at' => $this->faker->dateTimeBetween('-5 years', 'now'), // Set created_at to a random date between 5 years ago and now
         ];
+             
         
     }
     

@@ -21,6 +21,22 @@
 </head>
 
 <body>
+    @if ($errors->any())
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+            <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    @endif
     <x-user-components.navbar.navbar />
     @yield('content')
     <x-user-components.footer />
@@ -63,9 +79,22 @@
             });
         </script>
     @endif
+    
 
 </body>
 @stack('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if ($errors->any())
+            const toastEl = document.querySelector('.toast');
+            const toast = new bootstrap.Toast(toastEl, {
+                delay: 5000  // Delay time in milliseconds (5000ms = 5 seconds)
+            });
+            toast.show();
+        @endif
+    });
+</script>
+
 <script>
     var botmanWidget = {
         aboutText: 'Start the conversation by saying hi',

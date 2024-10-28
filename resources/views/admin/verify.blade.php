@@ -51,12 +51,15 @@
                                     <span class="badge text-bg-danger">warning</span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="d-flex gap-3">
                                 <button class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#{{ $user->id }}">Verify</button>
+                                <button class="btn btn-danger" data-bs-toggle="modal" 
+                                    data-bs-target="#reject">Reject</button>
                             </td>
                         </tr>
                         <x-admin-components.modal.verify-user :user="$user" modalId="{{ $user->id }}" />
+                        <x-admin-components.modal.reject-verify-user :user="$user" />
                     @endforeach
                 </tbody>
             </table>

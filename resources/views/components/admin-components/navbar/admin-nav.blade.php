@@ -38,7 +38,7 @@
             <div class="icon-links {{ Request::is('admin/announcements') || Request::is('admin/announcements/create') ? 'active' : ' '}}">
                 <a href="#">
                     <i class='bx bxs-megaphone'></i>
-                    <span class="link_name">Announcements</span>    
+                    <span class="link_name">Announcement</span>    
                 </a>
                 <i class="bx bx-chevron-down arrow" style="cursor: pointer"></i>
             </div>
@@ -108,6 +108,7 @@
     }
 </script>
     <script>
+        let linkName = document.querySelectorAll('.link_name');
         let dropdownItems = document.querySelectorAll('.dropdownlist');
         dropdownItems.forEach(item => {
             item.addEventListener("click", (e) => {
@@ -140,6 +141,9 @@
             sidebar.classList.toggle("close");
             content.classList.toggle("collapsed");
             menuBtn.classList.toggle("collapsed");
+            linkName.classList.toggle('show');
+
+            console.log(linkName);
         });
     </script>
 @endpush

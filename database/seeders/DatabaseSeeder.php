@@ -19,10 +19,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::factory()->create([
+            'firstname' => 'John',
+            'lastname' => 'Doe',    
+            'contact_no' => '123-456-7890',
+            'email' => 'defaultuser@example.com',
+            'password' => bcrypt('password123'), 
+            'isAdmin' => 0, 
+            'status' => 'verified',
+        ]);
         Complaint::factory(50)->create();
         Resident::factory(50)->create();
         DocumentRequest::factory()->count(50)->create();
         Document::factory(10)->create();
-        User::factory(1)->create();
     }
 }

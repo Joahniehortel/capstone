@@ -30,14 +30,12 @@ class Chart extends Controller
     ];
     public function barChart(Request $request)
     {
-        $demographic = $this->demographicData();
         $complaints_count = Complaint::all()->count();
-
-        $filter = $request->query('filter', 'year');
-        $filter = 'year';
+        $filter = $request->query('filter', 'year'); // Default to 'year' if 'filter' is not set
         $document_name = Document::all();
-        $lineChartData = $this->getMonthlyComplaintsCounts();
-        $pieChartData = $this->pieChart();
+        $demographic = $this->demographicData($filter);
+        $lineChartData = $this->getMonthlyComplaintsCounts($filter);
+        $pieChartData = $this->pieChart($filter);
         $ageDistribution = $this->ageDistribution($filter);
         $document_names = DB::table('document_requests')
             ->select('request_file_name')
@@ -55,147 +53,120 @@ class Chart extends Controller
             $colors[$document] = randomColor();
         }
 
+        // Initialize arrays for monthly and yearly counts
+        $document_request_yearly_counts = [];
+        $yearly_totals = [];
         $document_request_monthly_counts = [];
         $monthly_totals = [];
-        $clustering_data = [];
 
-        if ($filter == 'year') {
+        // Initialize summary variable
+        $summary = "No data available for the selected period."; // Default summary
+
+        if ($filter == 'month') {
+            // Get the current year for monthly data
+            $currentYear = date('Y');
+
+            // Prepare monthly data for the current year
             foreach ($this->monthNames as $month => $month_name) {
                 foreach ($document_names as $document) {
                     $count = DB::table('document_requests')
                         ->where('request_file_name', $document)
-                        ->whereYear('date_requested', 2024)
+                        ->whereYear('date_requested', $currentYear) // Only current year
                         ->whereMonth('date_requested', $month)
                         ->count();
 
-                    $document_request_monthly_counts[$document][$month_name] = $count;
-                    $monthly_totals[$month_name] = ($monthly_totals[$month_name] ?? 0) + $count;
-
-                    $clustering_data[$document][] = $count;
+                    // Accumulate counts for each document by month for the current year
+                    $document_request_monthly_counts[$document][$month_name] =
+                        ($document_request_monthly_counts[$document][$month_name] ?? 0) + $count;
+                    $monthly_totals[$month_name] =
+                        ($monthly_totals[$month_name] ?? 0) + $count;
                 }
             }
-        } elseif ($filter == 'month') {
-            $month = $request->query('month', date('m'));
 
-            foreach ($document_names as $document) {
-                $days_in_month = Carbon::create(2024, $month)->daysInMonth;
+            // Generate monthly descriptive analytics for the current year's monthly data
+            $summary = $this->generateMonthlySummary($monthly_totals, $document_request_monthly_counts, $document_names);
+        } elseif ($filter == 'year') {
+            // Initialize arrays to store counts
+            $document_request_yearly_counts = [];
+            $yearly_totals = [];
 
-                for ($week = 1; $week <= ceil($days_in_month / 7); $week++) {
-                    $start_of_week = Carbon::create(2024, $month, 1)->addWeeks($week - 1)->startOfWeek();
-                    $end_of_week = Carbon::create(2024, $month, 1)->addWeeks($week - 1)->endOfWeek();
+            // Get yearly data for the past 5 years
+            for ($year = date('Y') - 5; $year <= date('Y'); $year++) {
+                foreach ($document_names as $document) {
+                    // Count requests for each document by year
+                    $count = DB::table('document_requests')
+                        ->where('request_file_name', $document)
+                        ->whereYear('created_at', $year)
+                        ->count();
 
-                    if ($end_of_week->month != $month) {
-                        $end_of_week = Carbon::create(2024, $month, $days_in_month)->endOfDay();
+                    // Accumulate counts for each document by year
+                    if (!isset($document_request_yearly_counts[$document])) {
+                        $document_request_yearly_counts[$document] = [];
                     }
+
+                    $document_request_yearly_counts[$document][$year] =
+                        ($document_request_yearly_counts[$document][$year] ?? 0) + $count;
+
+                    $yearly_totals[$year] = ($yearly_totals[$year] ?? 0) + $count;
+                }
+            }
+
+            // Prepare monthly data for the current year
+            $currentYear = date('Y');
+            $document_request_monthly_counts = [];
+            $monthly_totals = [];
+
+            foreach ($this->monthNames as $month => $month_name) {
+                foreach ($document_names as $document) {
 
                     $count = DB::table('document_requests')
                         ->where('request_file_name', $document)
-                        ->whereYear('date_requested', 2024)
-                        ->whereMonth('date_requested', $month)
-                        ->whereBetween('date_requested', [$start_of_week, $end_of_week])
+                        ->whereYear('created_at', $currentYear)
+                        ->whereMonth('created_at', $month)
                         ->count();
 
-                    $document_request_counts[$document]["Week $week"] = $count;
-                    $totals["Week $week"] = ($totals["Week $week"] ?? 0) + $count;
+                    // Accumulate counts for each document by month for the current year
+                    if (!isset($document_request_monthly_counts[$document])) {
+                        $document_request_monthly_counts[$document] = [];
+                    }
 
-                    $clustering_data[$document][] = $count;
+                    $document_request_monthly_counts[$document][$month_name] =
+                        ($document_request_monthly_counts[$document][$month_name] ?? 0) + $count;
+
+                    $monthly_totals[$month_name] = ($monthly_totals[$month_name] ?? 0) + $count;
                 }
             }
+
+            // Generate yearly descriptive analytics
+            $summary = $this->generateYearlySummary($yearly_totals, $document_request_yearly_counts, $document_names);
         }
+
 
         // Prepare data for the bar chart
         $barChartData = [
-            'labels' => array_keys($monthly_totals),
+            'labels' => $filter === 'year' ? array_keys($yearly_totals) : array_keys($monthly_totals),
             'datasets' => []
         ];
 
         foreach ($document_names as $document) {
-            // Initialize counts for months
-            $counts = array_fill_keys(array_keys($monthly_totals), 0);
+            // Initialize counts for months or years
+            $counts = $filter === 'year' ? array_fill_keys(array_keys($yearly_totals), 0) : array_fill_keys(array_keys($monthly_totals), 0);
 
-            // Populate counts if they exist
-            if (isset($document_request_monthly_counts[$document])) {
+            // Populate counts based on the selected filter
+            if ($filter === 'year' && isset($document_request_yearly_counts[$document])) {
+                $counts = $document_request_yearly_counts[$document];
+            } elseif ($filter === 'month' && isset($document_request_monthly_counts[$document])) {
                 $counts = $document_request_monthly_counts[$document];
             }
 
             $barChartData['datasets'][] = [
                 'label' => $document,
                 'data' => array_values($counts),
-                'backgroundColor' => $colors[$document] ?? 'rgba(0, 0, 0, 0.1)', // Default color if not found
-                'borderColor' => $colors[$document] ?? 'rgba(0, 0, 0, 0.1)', // Default border color if not found
+                'backgroundColor' => $colors[$document] ?? 'rgba(0, 0, 0, 0.1)',
+                'borderColor' => $colors[$document] ?? 'rgba(0, 0, 0, 0.1)',
                 'borderWidth' => 1,
             ];
         }
-
-        // Calculate overall monthly totals for trend analysis
-        $overall_monthly_totals = array_fill_keys($this->monthNames, 0);
-        foreach ($document_request_monthly_counts as $counts) {
-            foreach ($counts as $month_name => $count) {
-                $overall_monthly_totals[$month_name] += $count;
-            }
-        }
-
-        // Prepare summary based on data availability
-        $summary = "No data available for the selected period."; // Default message
-
-        if (array_sum($overall_monthly_totals) > 0) {
-            // Detect increasing and decreasing trends
-            $trend_months = [
-                'increases' => [],
-                'decreases' => [],
-            ];
-
-            $previous_count = null;
-            $current_trend = null;
-
-            foreach ($overall_monthly_totals as $month => $count) {
-                if ($previous_count !== null) {
-                    if ($count > $previous_count) {
-                        if ($current_trend !== 'up') {
-                            $current_trend = 'up';
-                            $trend_months['increases'][] = $month;
-                        }
-                    } elseif ($count < $previous_count) {
-                        if ($current_trend !== 'down') {
-                            $current_trend = 'down';
-                            $trend_months['decreases'][] = $month;
-                        }
-                    } else {
-                        $current_trend = null; // No trend if the count is unchanged
-                    }
-                }
-                $previous_count = $count;
-            }
-
-            // Create a summary of findings based strictly on data
-            $summary = "The monthly analysis of document requests in 2024 reveals significant trends in activity. ";
-
-            // Highlight significant months for summary
-            $highest_month = array_search(max($overall_monthly_totals), $overall_monthly_totals);
-            $lowest_month = array_search(min($overall_monthly_totals), $overall_monthly_totals);
-            $summary .= "The month with the highest volume of requests was $highest_month with " . max($overall_monthly_totals) . " requests, while the lowest was $lowest_month with " . min($overall_monthly_totals) . " requests. ";
-
-            // Analyze the average number of requests
-            $average_requests = array_sum($overall_monthly_totals) / count($overall_monthly_totals);
-            $summary .= "On average, there were " . round($average_requests, 2) . " requests per month. ";
-
-            // Average requests per document
-            $average_requests_per_document = [];
-            foreach ($document_request_monthly_counts as $document => $counts) {
-                $total_requests = array_sum($counts);
-                $average_requests_per_document[$document] = round($total_requests / count($counts), 2);
-                $summary .= "The average requests for '$document' was " . $average_requests_per_document[$document] . " requests per month. ";
-            }
-
-            if (!empty($trend_months['increases'])) {
-                $summary .= "During the months of " . implode(', ', $trend_months['increases']) . ", there was an observed increase in requests, suggesting potential heightened activity or awareness among residents. ";
-            }
-
-            if (!empty($trend_months['decreases'])) {
-                $summary .= "Conversely, requests decreased during the months of " . implode(', ', $trend_months['decreases']) . ", which may indicate seasonal trends or external factors affecting resident engagement. ";
-            }
-        }
-
         return view('admin.dashboard', [
             'totalResidents' => $pieChartData['totalResidents'],
             'ageDistribution' => $ageDistribution,
@@ -212,30 +183,196 @@ class Chart extends Controller
             'under_age' => $pieChartData['under_age'],
             'adult' => $pieChartData['adult'],
             'pwd' => $pieChartData['pwd'],
-            'indigenous' => $pieChartData['indigenous'] ,
+            'indigenous' => $pieChartData['indigenous'],
             'requestDocuments' => DB::table('document_requests')->count(),
             'residents' => DB::table('residents')->count(),
             'users' => DB::table('users')->count(),
         ]);
     }
 
-
-    public function getMonthlyComplaintsCounts()
+    private function generateYearlySummary($yearly_totals, $document_request_yearly_counts, $document_names)
     {
-        $complaints_monthly_counts = [];
-        $complaints_data = []; // Collect data points for clustering
+        if (empty($yearly_totals)) {
+            return "No data available for yearly totals.";
+        }
+    
+        // Prepare data for K-means clustering
+        $data = array_map(fn($count) => [$count], array_values($yearly_totals));
+        $kmeans = new KMeans(3); // Clusters: decrease, peak, increase
+        $clusters = $kmeans->cluster($data);
+    
+        // Organize years by trend
+        $trends = ['decrease' => [], 'peak' => [], 'increase' => []];
+        $years = array_keys($yearly_totals);
+    
+        foreach ($clusters as $index => $cluster) {
+            foreach ($cluster as $dataPoint) {
+                $yearIndex = array_search($dataPoint[0], array_values($yearly_totals));
+                if ($yearIndex !== false) {
+                    $year = $years[$yearIndex];
+                    if ($index === 0) $trends['decrease'][] = $year;
+                    elseif ($index === 1) $trends['peak'][] = $year; // Peak year
+                    else $trends['increase'][] = $year;
+                }
+            }
+        }
+        // Highest and lowest request years
+        $highestYear = array_search(max($yearly_totals), $yearly_totals);
+        $lowestYear = array_search(min($yearly_totals), $yearly_totals);
+        $averageRequests = round(array_sum($yearly_totals) / count($yearly_totals), 2);
+    
+        // Construct summary paragraph
+        $summary = "From the yearly analysis of document requests, {$highestYear} recorded the peak number of requests with " . max($yearly_totals) . 
+                   ", while {$lowestYear} had the lowest at " . min($yearly_totals) . ". The average annual requests over this period were {$averageRequests}. " .
+                   "Trends show that document requests decreased in the years " . implode(', ', array_unique($trends['decrease'])) . 
+                   ", reached a peak in " . implode(', ', array_unique($trends['peak'])) . 
+                   ", and increased in " . implode(', ', array_unique($trends['increase'])) . ". ";
+    
+        // Document-specific requests as percentages
+        $totalRequests = array_sum($yearly_totals);
+        foreach ($document_names as $document) {
+            $docTotal = array_sum($document_request_yearly_counts[$document] ?? []);
+            $percentage = $totalRequests > 0 ? round(($docTotal / $totalRequests) * 100, 2) : 0;
+            $summary .= "{$document} requests constituted {$percentage}% of the total. ";
+            
+            foreach (array_keys($yearly_totals) as $year) {
+                $count = $document_request_yearly_counts[$document][$year] ?? 0;
+                $yearPercentage = $yearly_totals[$year] > 0 ? round(($count / $yearly_totals[$year]) * 100, 2) : 0;
+                if ($yearPercentage > 0) {
+                    $summary .= "In {$year}, there were {$count} requests for {$document}, making up {$yearPercentage}% of that year’s total. ";
+                }
+            }
+        }
+    
+        $summary .= "Overall, document requests showed notable yearly fluctuations, reflecting changing public demand.";
+    
+        return $summary;
+    }
+    
+    private function generateMonthlySummary($monthly_totals, $document_request_monthly_counts, $document_names)
+    {
+        $currentYear = date('Y');
+        $summary = "In {$currentYear}, an analysis of monthly document requests reveals intriguing trends and fluctuations in public demand. ";
 
-        // Collect counts for each month
+        // Prepare data for clustering
+        $monthlyData = array_values($monthly_totals);
+
+        // Organize months into trends based on request counts
+        $trends = ['downtrend' => [], 'stable' => [], 'uptrend' => []];
+
+        for ($i = 0; $i < count($monthlyData); $i++) {
+            if ($i > 0) {
+                // Compare with the previous month
+                if ($monthlyData[$i] < $monthlyData[$i - 1]) {
+                    $trends['downtrend'][] = date("F", mktime(0, 0, 0, $i + 1, 1));
+                } elseif ($monthlyData[$i] == $monthlyData[$i - 1]) {
+                    $trends['stable'][] = date("F", mktime(0, 0, 0, $i + 1, 1));
+                } else {
+                    $trends['uptrend'][] = date("F", mktime(0, 0, 0, $i + 1, 1));
+                }
+            }
+        }
+        // Find the month with the highest and lowest requests
+        if (count(array_filter($monthly_totals)) > 0) { 
+            $highest_month = array_search(max($monthly_totals), $monthly_totals);
+            $lowest_month = array_search(min($monthly_totals), $monthly_totals);
+            $highest_count = max($monthly_totals);
+            $lowest_count = min($monthly_totals);
+        } else {
+            // Handle the case where all values are zero
+            $highest_month = null;
+            $lowest_month = null;
+            $highest_count = 0;
+            $lowest_count = 0;
+        }
+        // Compile the summary with added details
+        $summary .= "Throughout the year, significant variability was observed in document requests. ";
+        $summary .= "The following trends were identified: ";
+        $summary .= "Months exhibiting a downtrend include " . implode(', ', $trends['downtrend']) . ". ";
+        $summary .= "Stable months were noted as " . implode(', ', $trends['stable']) . ". ";
+        $summary .= "In contrast, months showing an uptrend were " . implode(', ', $trends['uptrend']) . ". ";
+
+        $summary .= "Remarkably, the month with the highest number of requests was {$highest_month}, with a staggering total of {$highest_count} requests. ";
+        $summary .= "Conversely, {$lowest_month} saw the lowest activity, with only {$lowest_count} requests logged. ";
+        $summary .= "This analysis highlights the dynamic nature of public engagement and the varying needs for documentation across different months of the year.";
+        
+        return $summary;
+    }
+
+
+    public function getMonthlyComplaintsCounts($filter)
+    {
+        if ($filter === 'year') {
+            // Get the last 5 years of complaint counts
+            $yearly_complaints_counts = [];
+            $current_year = date('Y');
+            $years = range($current_year - 4, $current_year);
+
+            // Count complaints for each year
+            foreach ($years as $year) {
+                $count = DB::table('complaints')
+                    ->whereYear('created_at', $year)
+                    ->count();
+                $yearly_complaints_counts[$year] = $count;
+            }
+
+            // Prepare data for the line chart
+            $lineChartData = [
+                'title' => 'Yearly Number of Complaints',
+                'labels' => array_keys($yearly_complaints_counts),
+                'data' => array_values($yearly_complaints_counts),
+            ];
+
+            // Summary for yearly complaints
+            $highest_complaint_count = max($yearly_complaints_counts);
+            $highest_complaint_year = array_keys($yearly_complaints_counts, $highest_complaint_count)[0];
+            $total_complaints = array_sum($yearly_complaints_counts);
+            $average_complaints = $total_complaints / count($yearly_complaints_counts);
+
+            // Analyze trends
+            $trends = [];
+            $previous_count = null;
+
+            foreach ($yearly_complaints_counts as $year => $count) {
+                if ($previous_count !== null) {
+                    if ($count > $previous_count) {
+                        $trends[] = "an increase in complaints in $year compared to the previous year";
+                    } elseif ($count < $previous_count) {
+                        $trends[] = "a decrease in complaints in $year compared to the previous year";
+                    }
+                }
+                $previous_count = $count;
+            }
+
+            // Generate a more descriptive summary
+            $summary = "The yearly analysis of complaints from " . ($current_year - 4) . " to $current_year provides insights into public concerns and complaint trends over time. Over this five-year period, there were a total of $total_complaints complaints, with an average of " . round($average_complaints, 2) . " complaints per year. The peak year for complaints was $highest_complaint_year, which saw the highest recorded count of $highest_complaint_count complaints, indicating a period of heightened public feedback or issues. Observing trends across this span, there were distinct shifts in the volume of complaints, including " . implode(", ", $trends) . ". Overall, the data reflects the varying levels of community engagement and responsiveness over these years, capturing the evolving concerns of the public.";
+
+            return [
+                'lineChartData' => $lineChartData,
+                'lineChartSummary' => $summary,
+                'clusteredMonths' => [],
+                'trendMonths' => [],
+            ];
+        }
+
+
+
+
+        $complaints_monthly_counts = [];
+        $complaints_data = []; // Data points for clustering
+
+        // Count complaints for each month in the current year
         foreach ($this->monthNames as $month_number => $month_name) {
             $count = DB::table('complaints')
-                ->whereYear('created_at', 2024)
+                ->whereYear('created_at', 2024) // Adjust to the current year dynamically if necessary
                 ->whereMonth('created_at', $month_number)
                 ->count();
 
             $complaints_monthly_counts[$month_name] = $count;
-            $complaints_data[] = [$count]; // Prepare data for K-Means clustering
+            $complaints_data[] = [$count]; // Prepare for K-Means clustering
         }
-        // Check if there are any complaints
+
+        // Return message if no complaints are available
         if (array_sum($complaints_monthly_counts) === 0) {
             return [
                 'lineChartData' => null,
@@ -245,39 +382,30 @@ class Chart extends Controller
             ];
         }
 
-        // K-Means Clustering (3 clusters: downtrend, stable, uptrend)
         $kmeans = new KMeans(3);
         $clusters = $kmeans->cluster($complaints_data);
-
-        // Process clusters and assign labels (downtrend, stable, uptrend)
         $clustered_months = [
             'downtrend' => [],
             'stable' => [],
             'uptrend' => []
         ];
 
-        // Identify clusters by their average values
+        // Calculate average values for each cluster
         $cluster_means = [];
         foreach ($clusters as $index => $cluster) {
-            $sum = 0;
-            $count = count($cluster); // Count the number of data points in the cluster
-
-            foreach ($cluster as $data_point) {
-                $sum += $data_point[0]; // Assuming 1D data point
-            }
-
-            // Only calculate the mean if the count is greater than zero
+            $sum = array_sum(array_column($cluster, 0));
+            $count = count($cluster);
             $cluster_means[$index] = $count > 0 ? $sum / $count : 0; // Handle empty cluster
         }
 
-        // Sort clusters by mean values to determine downtrend, stable, and uptrend
-        asort($cluster_means); // Sort in ascending order
+        // Sort clusters by mean values to identify trends
+        asort($cluster_means);
 
         foreach ($clusters as $cluster_index => $cluster) {
             foreach ($cluster as $month_index => $data_point) {
-                $month_name = array_keys($complaints_monthly_counts)[$month_index]; // Get corresponding month name
+                $month_name = array_keys($complaints_monthly_counts)[$month_index];
 
-                // Assign to clusters based on sorted means
+                // Assign months to clusters based on their average
                 if (array_key_first($cluster_means) === $cluster_index) {
                     $clustered_months['downtrend'][] = $month_name; // Lowest average -> downtrend
                 } elseif (array_key_last($cluster_means) === $cluster_index) {
@@ -288,7 +416,7 @@ class Chart extends Controller
             }
         }
 
-        // Trend identification
+        // Identify trends in monthly complaint counts
         $trend_months = [
             'uptrends' => [],
             'downtrends' => [],
@@ -299,9 +427,9 @@ class Chart extends Controller
         foreach ($complaints_monthly_counts as $month => $count) {
             if ($previous_count !== null) {
                 if ($count > $previous_count) {
-                    $trend_months['uptrends'][] = $month; // Increased count indicates uptrend
+                    $trend_months['uptrends'][] = $month; // Increase indicates uptrend
                 } elseif ($count < $previous_count) {
-                    $trend_months['downtrends'][] = $month; // Decreased count indicates downtrend
+                    $trend_months['downtrends'][] = $month; // Decrease indicates downtrend
                 } else {
                     $trend_months['stable'][] = $month; // No change indicates stability
                 }
@@ -309,47 +437,40 @@ class Chart extends Controller
             $previous_count = $count;
         }
 
-        // Create a detailed summary of trends and clusters
-        $summary = "The chart illustrates the monthly trends in complaint counts from January to December 2024. ";
+        $summary = "In 2024, the analysis of monthly complaints reveals notable trends and fluctuations. ";
 
-        if (!empty($clustered_months['downtrend'])) {
-            $summary .= "Months with a downtrend included: " . implode(', ', $clustered_months['downtrend']) . ". ";
-        } else {
-            $summary .= "No months experienced a downtrend. ";
+        // Describe clusters with clearer context
+        $summary .= "Based on clustering analysis, we identified the following trends: ";
+        $cluster_descriptions = [];
+
+        foreach (['downtrend', 'stable', 'uptrend'] as $trend) {
+            if (!empty($clustered_months[$trend])) {
+                $cluster_descriptions[] = ucfirst($trend) . " months: " . implode(', ', $clustered_months[$trend]);
+            } else {
+                $cluster_descriptions[] = "No months experienced a " . $trend . ".";
+            }
         }
 
-        if (!empty($clustered_months['stable'])) {
-            $summary .= "Stable complaint counts were observed in: " . implode(', ', $clustered_months['stable']) . ". ";
-        } else {
-            $summary .= "All months exhibited significant fluctuations. ";
-        }
+        $summary .= implode('. ', $cluster_descriptions) . ". ";
 
-        if (!empty($clustered_months['uptrend'])) {
-            $summary .= "The months demonstrating an uptrend were: " . implode(', ', $clustered_months['uptrend']) . ". ";
-        } else {
-            $summary .= "There were no months with significant increases in complaints. ";
-        }
-
-        // Explain uptrends, downtrends, and stability
+        // Explain trends with explicit timeframes
         if (!empty($trend_months['uptrends'])) {
-            $summary .= "The following months experienced an increase in complaints: " . implode(', ', $trend_months['uptrends']) . ". ";
+            $summary .= "We observed an increase in complaints during the following months: " . implode(', ', $trend_months['uptrends']) . ". ";
         }
-
         if (!empty($trend_months['downtrends'])) {
-            $summary .= "Conversely, the following months saw a decrease in complaints: " . implode(', ', $trend_months['downtrends']) . ". ";
+            $summary .= "Conversely, complaints decreased in the following months: " . implode(', ', $trend_months['downtrends']) . ". ";
         }
-
         if (!empty($trend_months['stable'])) {
-            $summary .= "The months of " . implode(', ', $trend_months['stable']) . " showed stable complaint counts, indicating no change in the number of complaints. ";
+            $summary .= "There was stability in complaint counts during the months of: " . implode(', ', $trend_months['stable']) . ". ";
         }
 
-        // Identify significant spikes or stability
+        // Highlight the highest complaint month for emphasis
         $highest_complaint_count = max($complaints_monthly_counts);
         $highest_complaint_month = array_keys($complaints_monthly_counts, $highest_complaint_count)[0];
-        $summary .= "The most significant spike occurred in $highest_complaint_month, with a record of $highest_complaint_count complaints. ";
+        $summary .= "The month with the highest number of complaints was $highest_complaint_month, with a total of $highest_complaint_count complaints. ";
 
-        // Discuss seasonal or periodic patterns
-        $summary .= "Overall, complaint counts exhibited notable fluctuations throughout the year. The identified uptrends and downtrends suggest varying levels of public concern or responsiveness to issues during specific months.";
+        // Discuss overall fluctuations in a concise manner
+        $summary .= "Overall, the year displayed significant variability in complaint counts, reflecting diverse public concerns and varying responsiveness throughout different months. ";
 
         // Prepare data for line chart
         $lineChartData = [
@@ -366,74 +487,209 @@ class Chart extends Controller
         ];
     }
 
-
-    public function pieChart()
+    public function pieChart($filter)
     {
-        // Count the number of residents in different categories
-        $senior_citizen = DB::table('residents')->where('age', '>=', 60)->count();
-        $under_age = DB::table('residents')->where('age', '<', 18)->count();
-        $adult = DB::table('residents')->whereBetween('age', [18, 59])->count();
-        $pwd = DB::table('residents')->where('pwd', 'YES')->count();
-        $indigenous = DB::table('residents')->where('indigenous', 'Yes')->count();
+        $currentYear = now()->year;
 
-        $totalResidents = Resident::all()->count();
+        if ($filter == 'month') {
+            // Get counts for the current year
+            $senior_citizen = DB::table('residents')
+                ->where('age', '>=', 60)
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $under_age = DB::table('residents')
+                ->where('age', '<', 18)
+                ->whereYear('created_at', $currentYear)
+                ->count();
 
-        $pieChartData = [
-            'labels' => ['Senior Citizen', 'Under Age', 'Adult', 'PWD', 'Idigenous'],
-            'data' => [$senior_citizen, $under_age, $adult, $pwd, $indigenous]
-        ];
+            $adult = DB::table('residents')
+                ->whereBetween('age', [18, 59])
+                ->whereYear('created_at', $currentYear)
+                ->count();
 
-        // Initialize summary
-        $summary = "In our community, there are a total of {$totalResidents} residents. ";
+            $pwd = DB::table('residents')
+                ->where('pwd', 'YES')
+                ->whereYear('created_at', $currentYear)
+                ->count();
 
-        if ($totalResidents > 0) {
-            $summary .= "{$senior_citizen} are senior citizens (60 years and older), accounting for " . round(($senior_citizen / $totalResidents) * 100, 2) . "% of the population. ";
-            $summary .= "{$under_age} individuals are under 18 years old, representing " . round(($under_age / $totalResidents) * 100, 2) . "% of the total. ";
-            $summary .= "{$adult} residents fall within the age range of 18 to 59 years, making up " . round(($adult / $totalResidents) * 100, 2) . "% of the community. ";
-            $summary .= "Additionally, there are {$pwd} persons with disabilities (PWD), which constitutes " . round(($pwd / $totalResidents) * 100, 2) . "% of the total population.";
-            $summary .= "{$indigenous} residents are indigenous, representing " . round(($indigenous / $totalResidents) * 100, 2) . "% of the population.";
-        } else {
-            // If no residents are found
-            $summary .= "Currently, there are no residents in the system.";
+            $indigenous = DB::table('residents')
+                ->where('indigenous', 'Yes')
+                ->whereYear('created_at', $currentYear)
+                ->count();
+
+            // Total residents for the current year
+            $totalResidents = Resident::whereYear('created_at', $currentYear)->count();
+
+            // Prepare the pie chart data and summary for the current year
+            $pieChartData = [
+                'labels' => ['Senior Citizen', 'Under Age', 'Adult', 'PWD', 'Indigenous'],
+                'data' => [$senior_citizen, $under_age, $adult, $pwd, $indigenous]
+            ];
+
+            // Initialize summary
+            $summary = "In our community for the year {$currentYear}, there are a total of {$totalResidents} residents. ";
+
+            if ($totalResidents > 0) {
+                $summary .= "{$senior_citizen} are senior citizens (60 years and older). ";
+                $summary .= "{$under_age} individuals are under 18 years old. ";
+                $summary .= "{$adult} residents fall within the age range of 18 to 59 years. ";
+                $summary .= "{$pwd} persons have disabilities (PWD). ";
+                $summary .= "{$indigenous} residents are indigenous.";
+            } else {
+                // If no residents are found
+                $summary .= "Currently, there are no residents in the system.";
+            }
+
+            // Return the pie chart data and summary for the current year
+            return [
+                'pieChartData' => $pieChartData,
+                'pie_summary' => $summary,
+                'totalResidents' => $totalResidents,
+                'senior_citizen' => $senior_citizen,
+                'under_age' => $under_age,
+                'adult' => $adult,
+                'pwd' => $pwd,
+                'indigenous' => $indigenous,
+            ];
+        } else if ($filter == 'year') {
+            // Calculate for the last 5 years
+            $startDate = now()->subYears(5);
+            $endDate = now();
+
+            // Get counts for the last 5 years
+            $senior_citizen = DB::table('residents')
+                ->where('age', '>=', 60)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count();
+            $under_age = DB::table('residents')
+                ->where('age', '<', 18)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count();
+
+            $adult = DB::table('residents')
+                ->whereBetween('age', [18, 59])
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count();
+
+            $pwd = DB::table('residents')
+                ->where('pwd', 'YES')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count();
+
+            $indigenous = DB::table('residents')
+                ->where('indigenous', 'Yes')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count();
+
+            // Total residents for the last 5 years
+            $totalResidents = Resident::whereBetween('created_at', [$startDate, $endDate])->count();
+
+            // Prepare the pie chart data and summary for the past 5 years
+            $pieChartData = [
+                'labels' => ['Senior Citizen', 'Under Age', 'Adult', 'PWD', 'Indigenous'],
+                'data' => [$senior_citizen, $under_age, $adult, $pwd, $indigenous]
+            ];
+
+            // Initialize summary
+            $summary = "In our community for the past 5 years (from {$startDate->format('Y')} to {$endDate->format('Y')}), there are a total of {$totalResidents} residents.";
+
+            if ($totalResidents > 0) {
+                $summary .= "{$senior_citizen} are senior citizens (60 years and older). ";
+                $summary .= "{$under_age} individuals are under 18 years old. ";
+                $summary .= "{$adult} residents fall within the age range of 18 to 59 years. ";
+                $summary .= "{$pwd} persons have disabilities (PWD). ";
+                $summary .= "{$indigenous} residents are indigenous.";
+            } else {
+                // If no residents are found
+                $summary .= "Currently, there are no residents in the system.";
+            }
+
+            // Return the pie chart data and summary for the past 5 years
+            return [
+                'pieChartData' => $pieChartData,
+                'pie_summary' => $summary,
+                'totalResidents' => $totalResidents,
+                'senior_citizen' => $senior_citizen,
+                'under_age' => $under_age,
+                'adult' => $adult,
+                'pwd' => $pwd,
+                'indigenous' => $indigenous,
+            ];
         }
 
-        // Return the pie chart data and summary
-        return [
-            'pieChartData' => $pieChartData,
-            'pie_summary' => $summary,
-            'senior_citizen' => $senior_citizen,
-            'under_age' => $under_age,
-            'pwd' => $pwd,
-            'adult' => $adult,
-            'indigenous' => $indigenous,
-            'totalResidents' => $totalResidents,
-        ];
+        // Default return if no filter matches
+        return [];
     }
 
-
-    public function ageDistribution($filter)
+    public function ageDistribution($filter): array
     {
-        $filter = 'year';
-        // Retrieve resident counts based on age groups
-        $under18 = DB::table('residents')->where('age', '<', 18)->count();
-        $age18To34 = DB::table('residents')->whereBetween('age', [18, 34])->count();
-        $age35To49 = DB::table('residents')->whereBetween('age', [35, 49])->count();
-        $age50To64 = DB::table('residents')->whereBetween('age', [50, 64])->count();
-        $age65AndAbove = DB::table('residents')->where('age', '>=', 65)->count();
+        // Determine the current year
+        $currentYear = date('Y');
+
+        // Initialize counts for age groups
+        $under18 = 0;
+        $age18To34 = 0;
+        $age35To49 = 0;
+        $age50To64 = 0;
+        $age65AndAbove = 0;
 
         // Count total residents
-        $totalResidents = DB::table('residents')->count();
-
-        // Initialize the summary
-        $ageDistributionSummary = "In our community, we have a total of {$totalResidents} residents. Among them, ";
+        $totalResidents = 0;
 
         // Determine the time context based on the filter
-        if ($filter === 'this year') {
-            $year = date('Y');
-            $ageDistributionSummary .= "for the year {$year}, ";
+        if ($filter === 'year') {
+            // Get counts for the past 5 years including the current year
+            $totalResidents = DB::table('residents')
+                ->whereBetween(DB::raw('YEAR(created_at)'), [$currentYear - 5, $currentYear])
+                ->count();
+
+            $under18 = DB::table('residents')->where('age', '<', 18)
+                ->whereBetween(DB::raw('YEAR(created_at)'), [$currentYear - 5, $currentYear])
+                ->count();
+            $age18To34 = DB::table('residents')->whereBetween('age', [18, 34])
+                ->whereBetween(DB::raw('YEAR(created_at)'), [$currentYear - 5, $currentYear])
+                ->count();
+            $age35To49 = DB::table('residents')->whereBetween('age', [35, 49])
+                ->whereBetween(DB::raw('YEAR(created_at)'), [$currentYear - 5, $currentYear])
+                ->count();
+            $age50To64 = DB::table('residents')->whereBetween('age', [50, 64])
+                ->whereBetween(DB::raw('YEAR(created_at)'), [$currentYear - 5, $currentYear])
+                ->count();
+            $age65AndAbove = DB::table('residents')->where('age', '>=', 65)
+                ->whereBetween(DB::raw('YEAR(created_at)'), [$currentYear - 5, $currentYear])
+                ->count();
+
         } elseif ($filter === 'month') {
-            $month = date('F');
-            $ageDistributionSummary .= "for the month of {$month}, ";
+            // Get counts for the current year only
+            $totalResidents = DB::table('residents')
+                ->whereYear('created_at', $currentYear)
+                ->count();
+
+            $under18 = DB::table('residents')->where('age', '<', 18)
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $age18To34 = DB::table('residents')->whereBetween('age', [18, 34])
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $age35To49 = DB::table('residents')->whereBetween('age', [35, 49])
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $age50To64 = DB::table('residents')->whereBetween('age', [50, 64])
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $age65AndAbove = DB::table('residents')->where('age', '>=', 65)
+                ->whereYear('created_at', $currentYear)
+                ->count();
+        }
+
+        // Initialize the summary
+        $ageDistributionSummary = "In our community, we have a total of {$totalResidents} residents. ";
+
+        // Add filter context to summary
+        if ($filter === 'year') {
+            $ageDistributionSummary .= "for the last 5 years up to {$currentYear}, ";
+        } elseif ($filter === 'month') {
+            $ageDistributionSummary .= "for the year {$currentYear}, ";
         }
 
         $percentages = [];
@@ -454,10 +710,12 @@ class Chart extends Controller
             ];
         }
 
+        // Build the summary report
         $ageDistributionSummary .= "{$under18} individuals, accounting for {$percentages['under18']}%, are under the age of 18. ";
         $ageDistributionSummary .= "The age group of 18 to 34 years comprises {$age18To34} residents, making up {$percentages['age18To34']}% of the population. ";
         $ageDistributionSummary .= "Meanwhile, there are {$age35To49} individuals aged between 35 and 49, representing {$percentages['age35To49']}% of our community. ";
         $ageDistributionSummary .= "The 50 to 64 age group consists of {$age50To64} residents, which is {$percentages['age50To64']}%, while those aged 65 and above number {$age65AndAbove}, making up {$percentages['age65AndAbove']}% of our community.";
+
         return [
             'under18' => $under18,
             'age18To34' => $age18To34,
@@ -465,22 +723,77 @@ class Chart extends Controller
             'age50To64' => $age50To64,
             'age65AndAbove' => $age65AndAbove,
             'ageDistributionSummary' => $ageDistributionSummary,
-            'totalResidents' => $totalResidents
+            'totalResidents' => $totalResidents,
         ];
     }
 
-    public function demographicData()
-    {
-        $unemployed = Resident::where('occupation', '=', 'No')->count();
-        $employed = Resident::where('occupation', '=', 'Yes')->count();
-        $single = Resident::where('maritalStatus', '=', 'single')->count();
-        $married = Resident::where('maritalStatus', '=', 'married')->count();
-        $divorced = Resident::where('maritalStatus', '=', 'divorced')->count();
-        $separated = Resident::where('maritalStatus', '=', 'separated')->count();
-        $indigenous = Resident::where('indigenous', '=', 'Yes')->count();
-        $un_indigenous = Resident::where('indigenous', '=', 'No')->count();
-        $averageIncome = Resident::where('MonthlyIncome', '!=', 'No')->avg('MonthlyIncome');
 
+    public function demographicData($filter)
+    {
+        $currentYear = now()->year;
+
+        if ($filter == 'month') {
+            // Get counts for the current year
+            $unemployed = Resident::where('occupation', '=', null)
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $employed = Resident::where('occupation', '!=', '')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $single = Resident::where('maritalStatus', '=', 'single')
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $married = Resident::where('maritalStatus', '=', 'married')
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $divorced = Resident::where('maritalStatus', '=', 'divorced')
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $separated = Resident::where('maritalStatus', '=', 'separated')
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $indigenous = Resident::where('indigenous', '=', 'Yes')
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $non_indigenous = Resident::where('indigenous', '=', 'No')
+                ->whereYear('created_at', $currentYear)
+                ->count();
+            $averageIncome = Resident::where('MonthlyIncome', '!=', 'No')
+                ->whereYear('created_at', $currentYear)
+                ->avg('MonthlyIncome');
+        } else if ($filter == 'year') {
+            // Get counts for the past 5 years
+            $unemployed = Resident::where('occupation', '=', null)
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $employed = Resident::where('occupation', '!=', '')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $single = Resident::where('maritalStatus', '=', 'single')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $married = Resident::where('maritalStatus', '=', 'married')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $divorced = Resident::where('maritalStatus', '=', 'divorced')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $separated = Resident::where('maritalStatus', '=', 'separated')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $indigenous = Resident::where('indigenous', '=', 'Yes')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $non_indigenous = Resident::where('indigenous', '=', 'No')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->count();
+            $averageIncome = Resident::where('MonthlyIncome', '!=', 'No')
+                ->whereBetween('created_at', [now()->subYears(5), now()])
+                ->avg('MonthlyIncome');
+        } else {
+
+            return [];
+        }
         return [
             'unemployed' => $unemployed,
             'employed' => $employed,
@@ -489,8 +802,8 @@ class Chart extends Controller
             'divorced' => $divorced,
             'separated' => $separated,
             'indigenous' => $indigenous,
-            'non_indigenous' => $un_indigenous,
-            'averageIncome' => $averageIncome
+            'non_indigenous' => $non_indigenous,
+            'averageIncome' => $averageIncome,
         ];
     }
 

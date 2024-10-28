@@ -18,7 +18,7 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Verify User</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">    
+            <div class="verify-modal-body" style="padding: 10px">    
                 <div class="d-flex justify-content-center align-items-center">
                     <div class="d-flex flex-column align-items-center">
                         <div class="mb-3">
@@ -27,20 +27,19 @@
                                 $fileName = basename($user->supporting_file); 
                             @endphp
                             @if (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
-                                <img class="image" src="{{ asset('storage/' . $user->supporting_file) }}" alt="Supporting File"/>
+                                <img class="image" src="{{ Storage::url($user->supporting_file) }}" alt="Supporting File"/>
                             @elseif ($fileExtension === 'pdf')
                                 <img class="image" src="/images/pdf-icon.png" alt="PDF File"/>
                             @elseif (in_array($fileExtension, ['doc', 'docx']))
-                                <img class="image" src="/images/word-icon.png" alt="Word Document"/>
+                                <img class="image" src="/images/word.jpg" alt="Word Document"/>
+                                <p class="file_name text-center"></p>
                             @else
                                 <img class="image" src="/images/file-icon.png" alt="File"/>
                             @endif
-                            <div class="mb-2">
-                                <strong></strong> {{ $fileName }}
+                            <div class="mb-2 text-center">
+                                <p>{{ $fileName }}</p>
                             </div>
                         </div>
-                    
-                        <!-- Download Button -->
                         <a href="{{ asset('storage/' . $user->supporting_file) }}" download="{{ basename($user->supporting_file) }}" class="btn btn-primary">
                             Download Supporting File
                         </a>

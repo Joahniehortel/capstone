@@ -15,20 +15,19 @@
                 </ol>
             </nav>
         </div>
-        {{-- <div class="col d-flex justify-content-end align-items-center">
-            <div class="col d-flex justify-content-end align-items-center">
-                <div class="d-flex justify-content-end align-items-center gap-3">
-                    <label for="dropdown">Filter by:</label>
-                    <div class="dropdown d-flex align-items-center justify-content-center">
-                        <select id="filterDropdown" class="form-select form-select-sm" aria-label=".form-select-sm example" style="font-size: 14px; border-radius: 0px">
-                            <option value="year">This Year</option>
-                            <option value="month">This Month</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-info" id="filterBtn">Export PDF</button>
+        <div class="col d-flex justify-content-end align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <label for="filterDropdown" class="mb-0">Filter by:</label>
+                <div class="dropdown">
+                    <select id="filterDropdown" class="form-select form-select-sm" aria-label="Filter selection" style="font-size: 14px; border-radius: 0;">
+                        <option value="month" selected>Monthly</option>
+                        <option value="year">Yearly</option>
+                    </select>
                 </div>
+                {{-- <button class="btn btn-info" id="filterBtn">Export PDF</button> --}}
             </div>
-        </div> --}}
+        </div>        
+        
     </div>
     <div class="box-container mb-4">
         <div class="col box box1">
@@ -192,7 +191,8 @@
         <div class="col" style="width: 60%">
             <canvas id="ageGroupHorizontalBarChart" width="800" height="600"></canvas>
         </div>
-        <div class="col" style="width: 40%">
+        <div class="col d-flex justify-cotent-center align-items-center flex-column" style="width: 40%">
+            <h3 style="font-size: 16px">Distribution Table</h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -259,7 +259,6 @@
                             </td>
                         </tr>
                     </tbody>
-                    
             </table>
         </div>
         <p>{{  $ageDistribution['ageDistributionSummary'] ?? '' }}</p>
@@ -268,7 +267,8 @@
         <div class="col" style="width: 40%">
             <canvas id="pieChart"></canvas>
         </div>
-        <div class="col" style="width: 60%">
+        <div class="col d-flex justify-content-center align-items-center flex-column" style="width: 60%">
+            <h3 style="font-size: 16px">Distribution Table</h3>
             <div class="container">
                 <table class="table table-bordered">
                     <thead>
@@ -346,7 +346,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Monthly Requested Documents',
+                    text: 'Requested Documents',
                     font: {
                         size: 16
                     }
@@ -401,7 +401,7 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Monthly Complaints',
+                        text: 'Complaints',
                         font: {
                             size: 16
                         }

@@ -110,9 +110,10 @@
 								<h3>Upload Image</h3>
 								<p>Image size must be less than <span>2MB</span></p>
 							</div>
-							<button type="button" class="select-image mb-3">Select Image</button>
+							<div id="file-name" style="text-align: center; margin-bottom: 10px;"></div>  
+							<button type="button" class="select-image mb-3" style="border-radius: 0px;">Select Image</button>
 							<button type="submit" class="w-100 btn btn-success">Submit</button>      
-						</div>         
+						</div>       
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -126,31 +127,56 @@
 	@push('script')
 		<script>
 			const selectImage = document.querySelector('.select-image');
-			const inputFile = document.querySelector('#file');
-			const imgArea = document.querySelector('.img-area');
-	
-			selectImage.addEventListener('click', function () {
-				inputFile.click();
-			})
-	
-			inputFile.addEventListener('change', function () {
-				const image = this.files[0]
-				if(image.size < 2000000) {
-					const reader = new FileReader();
-					reader.onload = ()=> {
-						const allImg = imgArea.querySelectorAll('img');
-						allImg.forEach(item=> item.remove());
-						const imgUrl = reader.result;
-						const img = document.createElement('img');
-						img.src = imgUrl;
-						imgArea.appendChild(img);
-						imgArea.classList.add('active');
-						imgArea.dataset.img = image.name;
-					}
-					reader.readAsDataURL(image);
-				} else {
-					alert("Image size more than 2MB");
-				}
-			})
+    const inputFile = document.querySelector('#file');
+    const imgArea = document.querySelector('.img-area');
+    const fileNameDisplay = document.getElementById('file-name');
+
+    selectImage.addEventListener('click', function () {
+        inputFile.click();
+    });
+
+    inputFile.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file.size < 100000000) {
+            const reader = new FileReader();
+            const fileType = file.type;
+
+            // Clear previous content
+            imgArea.innerHTML = '';
+            fileNameDisplay.innerText = file.name;
+
+            reader.onload = () => {
+                if (fileType.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = reader.result;
+                    img.style.width = '100%';
+                    img.style.height = '200px';
+                    imgArea.appendChild(img);
+                } else if (fileType === 'application/pdf') {
+                    const pdfIcon = document.createElement('i');
+                    pdfIcon.className = 'bx bxs-file-pdf icon';
+                    pdfIcon.style.fontSize = '100px';
+                    imgArea.appendChild(pdfIcon);
+                } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileType === 'application/msword') {
+                    const docIcon = document.createElement('i');
+                    docIcon.className = 'bx bxs-file-doc icon';
+                    docIcon.style.fontSize = '100px';
+                    imgArea.appendChild(docIcon);
+                } else {
+                    const fileIcon = document.createElement('i');
+                    fileIcon.className = 'bx bxs-file icon';
+                    fileIcon.style.fontSize = '100px';
+                    imgArea.appendChild(fileIcon);
+                }
+                
+                imgArea.classList.add('active');
+                imgArea.dataset.img = file.name;
+            };
+            
+            reader.readAsDataURL(file);
+        } else {
+            alert("File size is more than 100MB");
+        }
+    });
 		</script>
 	@endpush

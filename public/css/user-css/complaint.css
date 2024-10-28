@@ -5,7 +5,13 @@
 body{
     background-color: white;
 }
+.hidden-important{
+    display: none;
+}
 .complaint-image-area {
+    width: 100% !important; 
+    display: block; 
+    height: 500px;
     text-align: center;
     margin-bottom: 20px;
     position: relative; 
@@ -15,13 +21,37 @@ body{
     border: 1px solid #ddd; 
     width: 500px;
 }
+.updated-container{
+    width: 100% !important; 
+    display: none; 
+    height: 500px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative; 
+    padding: 20px;
+    background-size: cover;
+    background-position: center; 
+    border: 1px solid #ddd; 
+    width: 500px;
+
+}
+.video-container {
+    width: 100%;
+    max-width: 500px; /* Optional: set a maximum width */
+    margin: 0 auto; /* Center-aligns the video */
+}
+
+.video-container video {
+    width: 100%; /* Makes video responsive */
+    height: auto; /* Maintains aspect ratio */
+}
+
 .loading-indicator {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 10px; 
 }
-
 
 .complaint-image-area .icon {
     font-size: 100px;
@@ -75,7 +105,6 @@ body{
 .complaint-image-area.active:hover::before {
     opacity: 1;
 }
-
 .page-content{
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
@@ -167,8 +196,11 @@ body{
         padding: 20px;
     }
 }
-@media (max-width: 375px) {
+@media (max-width: 1000px) {
     iframe {
-        height: 100%; /* Or any desired height */
+        display: none;
+    }
+    .complain-content{
+        padding: 20px;
     }
 }

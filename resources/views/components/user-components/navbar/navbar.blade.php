@@ -103,6 +103,12 @@
                                                     @endisset
                                                 @elseif($notification->data['notification_type'] == 'Announcement')
                                                     <i class='bx bxs-calendar-check'></i>
+                                                @elseif($notification->data['notification_type'] == 'Account Verification')
+                                                    @if($notification->data['status']  == 'verified')
+                                                        <i class='bx bx-user-check' style="background-color: green"></i>
+                                                    @else
+                                                        <i class='bx bx-user-x' style='color:#ffffff; background-color: red' ></i>
+                                                    @endif
                                                 @elseif($notification->data['notification_type'] == 'Complaint')
 
                                                     @switch($notification->data['status'] ?? '')

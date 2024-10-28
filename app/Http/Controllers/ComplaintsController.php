@@ -49,15 +49,15 @@ class ComplaintsController extends Controller
     }
 
     public function submitComplain(Request $request){
+        // dd($request->all());
         $request->validate([
             'complaint_title' => 'required|string|max:255',
             'date_occured' => 'required|date|before_or_equal:today',
             'complaint_address' => 'required|string|max:255',
             'complaint_details' => 'required|string',
-            'note' => 'nullable|string',
-            'complaint_image' => 'nullable|mimes:jpg,jpeg,png,pdf,mp4,mp3|max:102400', // Max 100MB
         ]);
-        if(Auth::user()->status == 'unverified'){
+        $user = Auth::user();
+        if($user->status == 'unverified'){
             return back()->with('error', 'You need to verify your account first');
         }
         $imagePath = null;
@@ -80,7 +80,7 @@ class ComplaintsController extends Controller
     public function editComplaintDetails($id = null){
         $complaint = $id ? Complaint::findOrFail($id) : null;
 
-        return view('user.services.complaint')->with('complaint', $complaint);
+        return view('user.services.complaint-edit')->with('complaint', $complaint);
     }
     public function updateComplaintDetails(Request $request, $id)
     {
@@ -118,11 +118,8 @@ class ComplaintsController extends Controller
                 Storage::disk('public')->delete($complaint->complaint_image);
             }
         }
-    
-        // Update the complaint with the new data
         $complaint->update($data);
-    
-        // Return a successful response (e.g., redirect back with a success message)
+
         return redirect()->route('complaint.form')->with('success', 'Complaint updated successfully.');
     }
     

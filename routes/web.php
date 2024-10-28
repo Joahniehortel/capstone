@@ -61,9 +61,9 @@ Route::middleware('auth')->group(function (){
 });
 
 Route::post('/complaints/store', [ComplaintsController::class, 'submitComplain'])->name('complaint.store');
-Route::get('/complaints/edit/{id}', [ComplaintsController::class, 'editComplaintDetails'])->name(name: 'complaint.edit.details');
-Route::post('/complaints/update/{id}', [ComplaintsController::class, 'updateComplaintDetails'])->name(name: 'complaint.update.details');
-Route::post('/complaints/destroy/{id}', [ComplaintsController::class, 'destroy'])->name(name: 'complaint.destroy');
+Route::get('/complaints/edit/{id}', [ComplaintsController::class, 'editComplaintDetails'])->name('complaint.edit.details');
+Route::post('/complaints/update/{id}', [ComplaintsController::class, 'updateComplaintDetails'])->name('complaint.update.details');
+Route::post('/complaints/destroy/{id}', [ComplaintsController::class, 'destroy'])->name('complaint.destroy');
 
 Route::get('/officials', function(){
     return view('user.official');
@@ -97,7 +97,7 @@ Route::prefix('admin')->middleware('admin')->group(function() {
     Route::post('/request/update/{id}', [RequestController::class, 'update'])->name('documentRequest.update');
     Route::delete('/request/destroy/{id}', [RequestController::class, 'destroy'])->name('documentRequest.destroy');
     Route::get('/complaints', [ComplaintsController::class, 'index'])->name('admin.complaint');
-    Route::put('/complaints/update/{id}', [ComplaintsController::class, 'updateComplaintStatus'])->name(name: 'complaint.update');
+    Route::put('/complaints/update/{id}', [ComplaintsController::class, 'updateComplaintStatus'])->name('complaint.update');
     Route::get('residents', [ResidentsController::class, 'index'])->name('admin-resident');
     Route::view('/residents/add', 'admin.residents.resident-add' )->name('resident.addpage');
     Route::post('/residents/store', [ResidentsController::class, 'store'])->name('resident.store');
@@ -141,3 +141,4 @@ Route::prefix('admin')->middleware('admin')->group(function() {
 });
 Route::post('/verify/store/{id}', [VerifyController::class, 'toVerify'])->name('admin.toVerify.account');
 Route::post('/verify/account', [VerifyController::class, 'account'])->name('admin.verify.account');
+Route::post('/verify/reject/{id}', [VerifyController::class, 'toReject'])->name('admin.verify-reject');

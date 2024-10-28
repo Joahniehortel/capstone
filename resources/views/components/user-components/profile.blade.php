@@ -158,7 +158,7 @@
                                         <div class="request_list mb-1">
                                             <div class="row requested_container" style="box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px; padding:5px">
                                                 <div class="col">
-                                                    <span class="document_type">{{ $complaint->complaint_title }}</span>
+                                                    <span class="document_type">{{ Str::limit($complaint->complaint_title, 25, '...') }}</span><br>
                                                     <span><i class='bx bx-check-square'></i> {{ $complaint->complaint_status }}</span>
                                                     <p class="document_requested_date"><i class='bx bxs-calendar-event'></i> {{ \Carbon\Carbon::parse($complaint->created_at)->format('F j, Y') }}</p>
                                                 </div>
