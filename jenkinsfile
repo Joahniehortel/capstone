@@ -1,0 +1,33 @@
+pipeline {
+  agent any
+  stages {
+    stage('Preparation') {
+      steps {
+        sh 'php -v'
+        sh 'composer -v'
+        sh 'npm -v'
+        sh 'bower -v'
+        sh 'gulp -v'
+        sh 'mkdir storage storage/framework && cd storage/framework && mkdir sessions views cache'
+        sh 'sudo chmod -R 777 storage/*'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'composer install'
+        sh 'npm install'
+        sh 'bower install'
+        sh 'gulp production'
+      }
+    }
+    stage('Configure') {
+      steps {
+        sh 'sudo chmod -R 777 storage'
+        sh 'sudo chmod -R 777 bootstrap/cache'
+        sh 'cp .env.prod .env'
+        sh 'php artisan config:clear'
+        sh 'php artisan config:cache'
+      }
+    }
+  }
+}
