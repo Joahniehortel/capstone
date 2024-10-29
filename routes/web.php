@@ -42,16 +42,17 @@ Route::get('/register', [UserRegisterController::class, 'register'])->name('regi
 Route::post('/register', [UserRegisterController::class,'store'])->name('register.store');
 
 Route::get('/logout', [UserLoginController::class, 'logout'])->name('logout');
-    
-Route::get('/home', function() {
-    $latestAnnouncements = Announcement::latest()->take(3)->get();
-    return view('user.home')->with('latestAnnouncements', $latestAnnouncements);
-})->name('home');
 
 Route::get('/', function() {
     $latestAnnouncements = Announcement::latest()->take(3)->get();
     return view('user.home')->with('latestAnnouncements', $latestAnnouncements);
 })->name('home');
+Route::get('/home', function() {
+    $latestAnnouncements = Announcement::latest()->take(3)->get();
+    return view('user.home')->with('latestAnnouncements', $latestAnnouncements);
+})->name('home');
+
+
 Route::get('/request', [DocumentController::class, 'index'])->name('user.request');
 Route::post('request/{id}', [DocumentController::class, 'documentRequest'])->name('user.request.documentrequest');
 Route::post('request/update/{id}', [DocumentController::class, 'documentRequestUpdate'])->name('user.request.documentrequest.update');
