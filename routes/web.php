@@ -48,6 +48,10 @@ Route::get('/home', function() {
     return view('user.home')->with('latestAnnouncements', $latestAnnouncements);
 })->name('home');
 
+Route::get('/', function() {
+    $latestAnnouncements = Announcement::latest()->take(3)->get();
+    return view('user.home')->with('latestAnnouncements', $latestAnnouncements);
+})->name('home');
 Route::get('/request', [DocumentController::class, 'index'])->name('user.request');
 Route::post('request/{id}', [DocumentController::class, 'documentRequest'])->name('user.request.documentrequest');
 Route::post('request/update/{id}', [DocumentController::class, 'documentRequestUpdate'])->name('user.request.documentrequest.update');
